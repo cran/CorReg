@@ -1,0 +1,23 @@
+\name{MSEZ}
+\alias{MSEZ}
+\title{Computes the MSE on the joint distribution of the dataset}
+\usage{
+MSEZ(X = X, X_appr = NULL, B = NULL, Z = Z, scale = TRUE)
+}
+\arguments{
+  \item{X}{the dataset to predict}
+
+  \item{X_appr}{an optional learning set}
+
+  \item{B}{the structure tested (if known)}
+
+  \item{Z}{binary adjacency matrix of the structure (size
+  p)}
+
+  \item{scale}{boolean defining wether the dataset has to
+  be scaled or not}
+}
+\description{
+Computes the MSE on the joint distribution of the dataset
+}
+

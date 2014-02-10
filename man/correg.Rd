@@ -1,0 +1,73 @@
+\name{correg}
+\alias{correg}
+\title{Estimates the response variable using a structure}
+\usage{
+correg(X = X, Y = Y, Z = NULL, B = NULL, compl = TRUE, expl = TRUE,
+  pred = TRUE, prednew = FALSE, select = "lar", criterion = c("MSE",
+  "BIC"), X_test = NULL, Y_test = NULL, intercept = TRUE, K = 10,
+  groupe = NULL, Amax = NULL, lambda = 1, returning = TRUE,
+  nbalter = 10, deltamin = 0.01, alpha = NULL)
+}
+\arguments{
+  \item{B}{the (p+1)xp matrix associated to Z and that
+  contains the parameters of the sub-regressions}
+
+  \item{lambda}{parameter for elasticnet (quadratic
+  penalty)}
+
+  \item{X}{the data matrix (covariates) without the
+  intercept}
+
+  \item{Y}{The response variable vector}
+
+  \item{Z}{The structure (adjacency matrix) between the
+  covariates}
+
+  \item{compl}{boolean to decide if the complete modele is
+  computed}
+
+  \item{expl}{boolean to decide if the explicative model is
+  in the output}
+
+  \item{pred}{boolean to decide if the predictive model is
+  computed}
+
+  \item{select}{selection method in
+  ("lar","lasso","forward.stagewise","stepwise",
+  "elasticnet", "NULL","ridge","adalasso")}
+
+  \item{criterion}{the criterion used to compare the
+  models}
+
+  \item{K}{the number of clusters for cross-validation}
+
+  \item{groupe}{a vector to define the groupes used for
+  cross-validation (to obtain a reproductible result)}
+
+  \item{Amax}{the maximum number of covariates in the final
+  model}
+
+  \item{returning}{boolean : second predictive step
+  (selection on I1 knowing I2 coefficients)}
+
+  \item{X_test}{validation sample}
+
+  \item{Y_test}{response for the validation sample}
+
+  \item{intercept}{boolean. If FALSE intercept will be set
+  to 0 in each model.}
+
+  \item{alpha}{Coefficients of the explicative model to
+  coerce the predictive step. if not NULL explicative step
+  is not computed.}
+
+  \item{prednew}{alternate optimisation for predictive}
+
+  \item{nbalter}{number of alternance for prednew}
+
+  \item{deltamin}{criterion to stop alternance}
+}
+\description{
+Estimates the response variable using a structure
+}
+

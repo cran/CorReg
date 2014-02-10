@@ -1,0 +1,30 @@
+\name{density_estimation}
+\alias{density_estimation}
+\title{BIC of estimated  marginal gaussian mixture densities}
+\usage{
+density_estimation(X = X, nbclustmax = 10, verbose = FALSE,
+  detailed = FALSE, max = TRUE, mclust = TRUE, nbini = 50)
+}
+\arguments{
+  \item{X}{the dataset (matrix)}
+
+  \item{nbclustmax}{max number of clusters in the gaussian
+  mixtures}
+
+  \item{verbose}{verbose or not}
+
+  \item{detailed}{boolean to give the details of the
+  mixtures found}
+
+  \item{max}{boolean. Use an heuristic to shrink nbclustmax
+  according to the number of individuals in the dataset}
+
+  \item{mclust}{boolean. Use mclust instead of Rmixmod}
+
+  \item{nbini}{number of initial points for Rmixmod}
+}
+\description{
+Estimates the density of each covariates with gaussian
+mixture models and then gives the associated BIC.
+}
+

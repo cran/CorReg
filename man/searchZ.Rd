@@ -1,0 +1,77 @@
+\name{searchZ}
+\alias{searchZ}
+\title{MCMC algo to find a structure between the covariates}
+\usage{
+searchZ(X = X, Z = NULL, Bic_null_vect = NULL, candidates = -1,
+  reject = 1, methode = 1, p1max = 5, p2max = NULL, Maxiter = 1,
+  plot = FALSE, best = TRUE, better = FALSE, random = TRUE,
+  verbose = 1, nb_opt_max = NULL, exact = TRUE, nbini = NULL,
+  star = TRUE, clean = TRUE, ...)
+}
+\arguments{
+  \item{X}{the dataset}
+
+  \item{Z}{binary adjacency matrix of size p. if NULL zero
+  matrix is used}
+
+  \item{Bic_null_vect}{the BIC of the null hypothesis (used
+  for independent variables)}
+
+  \item{candidates}{0:row and column,-1:column only,
+  int>0:random int candidates, -2 : all (but the diag), -3
+  : non-zeros}
+
+  \item{reject}{0: constraint relaxation, 1: reject mode}
+
+  \item{methode}{parameter for OLS (matrix inversion)
+  1:householderQr, 2:colPivHouseholderQr}
+
+  \item{p1max}{maximum complexity for a regression}
+
+  \item{p2max}{maximum number of regressions}
+
+  \item{Maxiter}{number of steps}
+
+  \item{plot}{TRUE: returns for each step the type of move,
+  complexity and BIC}
+
+  \item{best}{TRUE: systematically jumps to the best BIC
+  seen ever when seen (it is stored even if best=FALSE)}
+
+  \item{better}{TRUE: systematically jumps to the best
+  candidate if better than stationnarity (random wheighted
+  jump otherwise)}
+
+  \item{random}{if FALSE:moves only to improve and only to
+  the best}
+
+  \item{verbose}{0:none, 1:BIC,step and complexity when
+  best BIC found 2:BIC, step, complexity, nb candidates and
+  best candidate when best BIC found}
+
+  \item{nb_opt_max}{stop criterion defining how many times
+  the chain can walk (or stay) on the max found}
+
+  \item{exact}{boolean. If exact subregression is found it
+  gives its content (another verbose mode).}
+
+  \item{nbini}{Number of initialisations (using Winitial).
+  if NULL and Zini is NULL : only one chain beginning with
+  zero matrix.}
+
+  \item{star}{boolean to compute BIC* instead of BIC
+  (stronger penalization of the complexity). WARNING :
+  star=TRUE implies p2max<=p/2}
+
+  \item{clean}{cleaning steps at the end of the walk
+  (testing each remainging 1 for removal)}
+
+  \item{...}{parameters to be passed (for Winitial).}
+}
+\value{
+step 0:delete, 1: add, 2: stationnarity
+}
+\description{
+MCMC algo to find a structure between the covariates
+}
+

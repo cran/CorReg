@@ -1,0 +1,20 @@
+\name{MSE_loc}
+\alias{MSE_loc}
+\title{simple MSE function}
+\usage{
+MSE_loc(Y = Y, X = X, A = A, intercept = T)
+}
+\arguments{
+  \item{Y}{the response variable (vector)}
+
+  \item{X}{the dataset (matrix of covariates)}
+
+  \item{A}{the vector of coefficients}
+
+  \item{intercept}{boolean (to add a column of 1 to X if A
+  contains an intercept and X don't)}
+}
+\description{
+simple MSE function
+}
+

@@ -1,0 +1,15 @@
+\name{compare_sign}
+\alias{compare_sign}
+\title{compare signs of the coefficients in two vectors}
+\usage{
+compare_sign(trueA = trueA, Aalgo = Aalgo)
+}
+\arguments{
+  \item{trueA}{first vector}
+
+  \item{Aalgo}{second vector}
+}
+\description{
+compare signs of the coefficients in two vectors
+}
+
