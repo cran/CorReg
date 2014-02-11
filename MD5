@@ -1,5 +1,5 @@
-f67690731d6286569a7e7262c6cf65c3 *DESCRIPTION
-6b1805e858063213befaa9eedb2bddef *NAMESPACE
+8aec5f5bffd480a27ff58945d3340418 *DESCRIPTION
+c1a82f79b24c2b4d349f34b9525b9dbc *NAMESPACE
 c4e7cb87aa9b44e96058aa4fa973e567 *R/BICZmiss.R
 650ab680aa140b016154bd79ded81534 *R/BICZsparse.R
 e6d3dda86ca2a2cc5e8a2c4be896412c *R/BicLoc.R
@@ -37,12 +37,12 @@ f8c709592b84eebd0412cfee281797e0 *R/compare_struct.R
 1d7ef59a9d26d8d99796af4f2409a4b9 *R/compare_zero.R
 6ab99bb8f269e468aec5688875a5478b *R/confint_coef.R
 5ace481777d9f8f0e35e312de1a57475 *R/corXY.R
-923ffab85021b83f8509c91c3eca9fcb *R/correg.R
-97e44d624cb70ec2b43f8e5931138c00 *R/density_estimation.R
+6ea7674827e5964400581dc10ebfdbbc *R/correg.R
+0a3cdc6d26657a2b8017142b08b07ca3 *R/density_estimation.R
 3800d1b432073841099fc9bffc275c22 *R/explicatif.R
 539731a5a253ea57f5dfd730134b17ce *R/extract_Xtilde.R
 853d5a7f04194c14d7b11a29ab3ede66 *R/extract_lars.R
-559af57f72959083b521b749765644c5 *R/fillmiss.R
+764e5f8607e522afd69cb5d664e8fb9c *R/fillmiss.R
 ddf09539cdf1f33d7e132d002518b8cd *R/generateurA_ou.R
 1bd1cee6cea58b13d98c2c31dba9412d *R/generateurZ.R
 c675d74fa55e52d06804ae8f3838ca61 *R/hatB.R
