@@ -1,4 +1,4 @@
-8aec5f5bffd480a27ff58945d3340418 *DESCRIPTION
+77dc7f90c225f2034a8bb823a21105f4 *DESCRIPTION
 c1a82f79b24c2b4d349f34b9525b9dbc *NAMESPACE
 c4e7cb87aa9b44e96058aa4fa973e567 *R/BICZmiss.R
 650ab680aa140b016154bd79ded81534 *R/BICZsparse.R
@@ -100,8 +100,8 @@ e37789b37b9e7752eeb1c1a2e5e61977 *man/searchZ.Rd
 e0016e5da9ebf8c4a0b0d8d4802126c6 *src/BICZsparse_cpp.h
 50d072358b772c725f2491e3564323b3 *src/BICZsparse_j_cpp.cpp
 09689799da321f2b322a4fdc3024f2b0 *src/BICZsparse_j_cpp.h
-495254b6af2e02a81357729d004068b3 *src/BicLoc_cpp.cpp
-0f3ec681760ade14d1fcc1751238ca70 *src/BicLoc_cpp.h
+85f7c0f0f04242eb662c62a97066ea28 *src/BicLoc_cpp.cpp
+47f9aa250194a8db3e63536a0bd08c4e *src/BicLoc_cpp.h
 a28981f98d98bc76d2abe1b338dac14c *src/BicTheta.cpp
 6e152beddad24c8cf635e1098120c51f *src/BicTheta.h
 d152451e6a45420c8f8639602da17afa *src/BicZ.cpp
@@ -114,14 +114,14 @@ f55921ab1f2cc0ff9bd9939e2915519e *src/BicZ_cpp2.h
 83524a721b4469a45040a7df439a5f3a *src/BicZ_j_cpp.h
 17cac8bc613295045d9e81df4440f0e3 *src/BicZmissRcpp.cpp
 1c5232ea88f4d955c12dd2b86b6050f8 *src/BicZmissRcpp.h
-3b621728033bcaadcbf901679e9c5151 *src/CVMSE.cpp
+cc2231b66ad32f4baea408930192ce4e *src/CVMSE.cpp
 518c1627547e113fe06e1d67448f649f *src/CVMSE.h
 6b7713cf8e6ec0bfa26cd8eae090212d *src/GM_likelihood.cpp
 595da3b452e339272d8b43b8556bf813 *src/GM_likelihood.h
 79c0cf873ed06d9e0ca4ef87ff15f766 *src/OLS.cpp
 2edd8030b81bd7d98e38780a8236901e *src/OLS.h
-cb9448d188893b1dd3f97170cdb06220 *src/OLS_cpp.cpp
-7854c3d5a7871e93463ffdf15f5d3e2e *src/OLS_cpp.h
+dd53e924e877ba5673072a852b1b1fc5 *src/OLS_cpp.cpp
+568094c41d7626c61f7cd241c69b14c2 *src/OLS_cpp.h
 df08158cfb334c8be3873cc47153953e *src/ProbaZ_cpp.cpp
 60a24f56ca59f474255c23a7738bd08f *src/ProbaZ_cpp.h
 ee25dee936caf787633a8d93bf66eaf1 *src/cleanZ.cpp
