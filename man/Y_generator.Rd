@@ -2,7 +2,8 @@
 \alias{Y_generator}
 \title{Response variable generator with a linear model}
 \usage{
-Y_generator(X = X, Amax = NULL, sigma_Y = 10, positive = 0.6)
+Y_generator(X = X, Amax = NULL, sigma_Y = 10, positive = 0.6,
+  Z = NULL, tp1 = 1, tp2 = 1, tp3 = 1, pb = 0)
 }
 \arguments{
   \item{X}{the dataset}
@@ -12,6 +13,17 @@ Y_generator(X = X, Amax = NULL, sigma_Y = 10, positive = 0.6)
   \item{sigma_Y}{the standard deviation of the noise}
 
   \item{positive}{the ratio of positive coefficients}
+
+  \item{tp1}{ratio of the right-side covariates in A}
+
+  \item{tp2}{ratio of the left-side covariates in A}
+
+  \item{tp3}{ratio of the totally independent covariates
+  (if exists) in A}
+
+  \item{pb}{kind of problem : 0=none, 1=simple, 2=strong}
+
+  \item{Z}{the structure adjacency matrix}
 }
 \description{
 Response variable generator with a linear model
