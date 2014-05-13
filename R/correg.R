@@ -28,7 +28,7 @@
 #' @param groupe a vector to define the groups used for cross-validation (to obtain a reproductible result)
 #' @param Amax the maximum number of covariates in the final model
 #' @param returning boolean : second predictive step (selection on I1 knowing I2 coefficients)
-# ' @param final boolean : recompute estimators without selection on the remaining parameters of the predictive model
+#' @param final boolean : recompute estimators without selection on the remaining parameters of the predictive model
 #' @param X_test validation sample
 #' @param Y_test response for the validation sample
 #' @param intercept boolean. If FALSE intercept will be set to 0 in each model.
@@ -37,14 +37,14 @@
 #' @param nbalter number of alternance for prednew
 #' @param deltamin criterion to stop alternance 
 #' @param g number of group of variables for clere
+#' @param explnew select the number of sub-regression to take into account (by AIC on the corresponding final model)
 #' 
-#' 
-correg<-function (X = X, Y = Y, Z = NULL, B = NULL, compl = TRUE, expl = TRUE, 
+correg<-function (X = X, Y = Y, Z = NULL, B = NULL, compl = TRUE, expl = TRUE, explnew=TRUE,
                 pred = TRUE,prednew=FALSE,
                 select = "lar",
                 criterion = c("MSE", "BIC"),
                 X_test = NULL, Y_test = NULL, intercept = TRUE, 
-                K = 10, groupe = NULL, Amax = NULL, lambda = 1,returning=TRUE,#final=FALSE,
+                K = 10, groupe = NULL, Amax = NULL, lambda = 1,returning=FALSE,final=FALSE,
                 nbalter=10,deltamin=0.01,alpha=NULL,g=5) 
 {
   res = list()
@@ -58,15 +58,16 @@ correg<-function (X = X, Y = Y, Z = NULL, B = NULL, compl = TRUE, expl = TRUE,
   }
   select = select[1]
   if(select=="NULL"){
-    returning=F
-#     final=F
+    returning=FALSE
   }
+  if(final){pred=TRUE}
+if(explnew){compl=TRUE}
   criterion = criterion[1]
   if (is.null(Amax)) {
     Amax = ncol(X) + 1
   }
   if (sum(Z) == 0) {
-    compl = T
+    compl = TRUE
   }
   if(!is.null(alpha)){
      expl=TRUE
@@ -115,7 +116,9 @@ correg<-function (X = X, Y = Y, Z = NULL, B = NULL, compl = TRUE, expl = TRUE,
     }
     res$compl$BIC = BicTheta(X = X, Y = Y, intercept = intercept, 
                              beta = res$compl$A)
+    res$compl$AIC=mon_AIC(theta=res$compl$A,Y=Y,X=X,intercept=intercept) 
   }
+#explicatif
   if (sum(Z) != 0 & (expl | pred)) {
     qui = WhoIs(Z = Z)
     I1 = qui$I1
@@ -175,6 +178,94 @@ correg<-function (X = X, Y = Y, Z = NULL, B = NULL, compl = TRUE, expl = TRUE,
        A_expl=alpha
     }
     res$expl$BIC = BicTheta(X = X, Y = Y, intercept = intercept, beta = A_expl)
+    res$expl$AIC=mon_AIC(theta=res$expl$A,Y=Y,X=X,intercept=intercept) 
+    
+    #nouvel explicatif
+    if(explnew){#selection sur explicatif####
+      qui = WhoIs(Z = Z)
+      I1 = qui$I1
+      I2 = qui$I2
+      R2_vect=R2Z(Z=Z,X=X,adj=TRUE)#evaluation des R2
+      R2_vect=R2_vect[R2_vect!=0]
+      #tri par R2 => nouvel I2 ordonné
+      I2=I2[order(R2_vect,decreasing=FALSE)]#on commence par garder ce qui est mal expliqué par le reste (donc forte perte et peu de corrélations)
+      #initialisation du résultat final (par le modèle complet déjà calculé, + AIC associé)
+      res$expl2$A=res$compl$A
+      resopt=res$compl$A
+      AICopt=mon_AIC(theta=resopt,Y=Y,X=X,intercept=intercept)
+      for (iexplnew in 1:length(I2)){
+         I1=c(qui$I1,I2[1:iexplnew])#c'est ici que tout se joue
+          if(!is.null(alpha)){
+             res$expl2$A=alpha
+          }else if (select == "NULL") {
+             res$expl2$A = OLS(X = as.matrix(X[, I1]), Y = Y, intercept = intercept)$beta
+          }else if (select != "elasticnet" & select != "ridge" & select != "adalasso"  & select!="clere" & select!="spikeslab") {
+             lars_expl = lars(x = as.matrix(X[, I1]), y = Y, type = select, 
+                              intercept = intercept)
+             res$expl2 = meilleur_lars(lars = lars_expl, X = as.matrix(X[, I1]), Y = Y, 
+                                      mode = criterion, intercept = intercept, 
+                                      K = K, groupe = groupe, Amax = Amax)
+          }else if (select=="elasticnet"){
+             lars_expl = renet(x = as.matrix(X[, I1]), y = Y, intercept = intercept, 
+                               lambda = lambda)
+             names(lars_expl)[4] = "coefficients"
+             res$expl2 = meilleur_lars(lars = lars_expl, X = as.matrix(X[,I1]), Y = Y, 
+                                      mode = criterion, intercept = intercept, 
+                                      K = K, groupe = groupe, Amax = Amax)
+          }else if(select=="adalasso"){
+             resada=adalasso(X=X[,I1],y=Y,k=K)    
+             if(intercept){
+                if(is.null(resada$intercept.adalasso)){
+                   resada$intercept.adalasso=0
+                }
+                res$expl2$A=c(resada$intercept.adalasso,resada$coefficients.adalasso)
+             }else{
+                res$expl2$A=c(resada$coefficients.adalasso)
+             }
+             Xloc=X[,I1][,resada$coefficients.adalasso!=0]
+             res$expl2$A[res$expl2$A!=0]=c(OLS(X=Xloc,Y=Y,intercept=intercept)$beta)       
+          }else if(select=="clere"){
+             res$expl2$A=A_clere(y=as.numeric(Y),x=X[,I1],g=g)
+          }else if(select=="spikeslab"){
+             respike=spikeslab(x=X[,I1],y=Y)
+             res$expl2$A=rep(0,times=ncol(X[,I1])+intercept)
+             if(intercept){
+                res$expl2$A[c(1,1+which(respike$gnet.scale!=0))]=OLS(X=X[,I1][,respike$gnet.scale!=0],Y=as.numeric(Y),intercept=intercept)$beta
+             }else{
+                res$expl2$A[respike$gnet.scale!=0]=OLS(X=X[,I1][,respike$gnet.scale!=0],Y=as.numeric(Y),intercept=intercept)$beta
+             }
+          }else{#ridge
+             lars_expl = linearRidge(Y~.,data=data.frame(X[,I1]))
+             res$expl2$A=coef(lars_expl)
+          }
+          if(is.null(alpha)){
+             A_expl = rep(0, times = ncol(X) + intercept)
+             if(intercept){
+                A_expl[c(intercept, I1 + intercept)] = res$expl2$A
+             }else{
+                A_expl[I1] = res$expl2$A
+             }
+             res$expl2$A = A_expl
+          }else{
+             A_expl=alpha
+          }
+          res$expl2$BIC = BicTheta(X = X, Y = Y, intercept = intercept, beta = A_expl)
+         #calcul du AIC
+         AICloc=mon_AIC(theta=res$expl2$A,Y=Y,X=X,intercept=intercept)
+         if(AICloc<AICopt){
+            resopt=res$expl2$A
+            AICopt=AICloc
+         }
+      }
+      #on remet les choses à leur place
+      res$expl2$A=resopt
+      res$expl2$AIC=AICopt
+      res$expl2$BIC = BicTheta(X = X, Y = Y, intercept = intercept, 
+                              beta = res$expl2$A)
+      qui = WhoIs(Z = Z)
+      I1 = qui$I1
+      I2 = qui$I2
+    }#fin du nouvel explicatif
     if (pred & length(I2)>0) {
       if(length(I2)<2 & select!="NULL"){
          select="lar"
@@ -283,7 +374,8 @@ correg<-function (X = X, Y = Y, Z = NULL, B = NULL, compl = TRUE, expl = TRUE,
       res$pred$CVMSE = CVMSE(X = X[, which(A_pred[-1] != 0)], Y = Y, intercept = intercept, K = K, groupe = groupe)
       res$pred$BIC = BicTheta(X = X, Y = Y, intercept = intercept, 
                               beta = A_pred)
-
+      res$pred$AIC=mon_AIC(theta=res$pred$A,Y=Y,X=X,intercept=intercept) 
+      
     }
     #nouveau prédictif####
     if (prednew) {
@@ -431,6 +523,28 @@ correg<-function (X = X, Y = Y, Z = NULL, B = NULL, compl = TRUE, expl = TRUE,
     if (pred) {
       res$pred$A = res$compl$A
     }
+    if (explnew){
+       res$expl2$A = res$compl$A
+    }
   }
+   if(pred & final){
+      res$final$A=res$pred$A
+      A_pred=res$pred$A
+      if(intercept){
+         quifinal=which(A_pred[-1]!=0)
+      }else{
+         quifinal=which(A_pred!=0)
+      }
+      if(length(quifinal)==0){
+         res$final=res$pred
+      }else{
+         resA_final=correg(X=X[,quifinal],Y=Y,returning=F,final=F,groupe=groupe,K=K,intercept=intercept,criterion=criterion,select=select,compl=TRUE,expl=FALSE,pred=FALSE)
+         quifinal=which(A_pred!=0)
+         res$final$A[quifinal]=resA_final$compl$A
+         res$final$BIC = resA_final$compl$BIC
+      }
+      res$final$AIC=mon_AIC(theta=res$final$A,Y=Y,X=X,intercept=intercept) 
+      
+   }
   return(res)
 }

@@ -7,7 +7,9 @@
 #' @param valid the size of the validation sample
 #' @param positive the ratio of positive coefficients in both the regression and the subregressions
 #' @param sigma_Y standard deviation for the noise of the regression
-#' @param sigma_X standard deviation for the noise of the subregression (all). ignored if gamma=T
+#' @param sigma_X standard deviation for the noise of the subregression (all). ignored if gamma=T or if R2 is not NULL
+#' @param R2 the strength of the subregressions
+#' @param R2Y the strength of the main regression
 #' @param gamma boolean to generate a p-sized vector sigma_X gamma-distributed
 #' @param gammashape shape parameter of the gamma distribution (if needed)
 #' @param gammascale scale parameter of the gamma distribution (if needed)
@@ -23,27 +25,40 @@
 #' @param nonlin to use non linear structure (half squared , half log). if not null, it is the proba to use power pnonlin instead of log
 #' @param pnonlin the power used if non linear structure
 #' @param scale boolean to scale X before computing Y
+#' @param Z the adjacency matrix to obtain
 #' @export
 mixture_generator<-function(n=130,
-                                p=100,
-                                ratio=0.4,
-                                max_compl=1,
-                                valid=1000,
-                                positive=0.6,
-                                sigma_Y=10,
-                                sigma_X=0.25,
-                                meanvar=NULL,
-                                sigmavar=NULL,
-                                lambda=3,#pour l enombre de composantes des m?langes gaussiens
-                                Amax=15,
-                                lambdapois=5,#pour les valeurs des coefs
-                                gamma=F,
-                                gammashape=1,
-                                gammascale=0.5,tp1=1,tp2=1,tp3=1,pb=0,nonlin=0,pnonlin=2,scale=TRUE
+                            p=100,
+                            ratio=0.4,
+                            max_compl=1,
+                            valid=1000,
+                            positive=0.6,
+                            sigma_Y=10,
+                            sigma_X=0.25,
+                            R2=0.99,
+                            R2Y=0.4,
+                            meanvar=NULL,
+                            sigmavar=NULL,
+                            lambda=3,#pour l enombre de composantes des m?langes gaussiens
+                            Amax=NULL,
+                            lambdapois=10,#pour les valeurs des coefs et des moyennes des variables
+                            gamma=FALSE,
+                            gammashape=1,
+                            gammascale=0.5,tp1=1,tp2=1,tp3=1,
+                            pb=0,nonlin=0,pnonlin=2,scale=TRUE,Z=NULL
 ){
-  max_compl=min(max_compl,p)
+   if(is.null(Z)){
+     max_compl=min(max_compl,p)
+   }else{
+      max_compl=max(colSums(Z))
+   }
+  if(is.null(Amax)){Amax=2*p}
   Amax=min(p+1,Amax) # min entre p+1 et Amax  why?
-  R=round(ratio*p) # R : entier nombre de personne a gauche
+  if(is.null(Z)){
+     R=round(ratio*p) # R : entier nombre de personne a gauche
+  }else{
+     R=sum(colSums(Z)!=0)
+  }
   if(R==0){pb=0}
   if(is.null(Amax) | Amax>p){Amax=p+1}
   #lmabda param?tre le nombre de composantes des m?langes gaussiens   
@@ -52,10 +67,19 @@ mixture_generator<-function(n=130,
   taille=n+valid
   qui=2:(p+1)  # vecteur de taille p qui contient les valeurs allant de 2 Ã  p+1 avec un pas de 1
   if(R>0){
-    list_X2=sample(qui,R) # melange R individus pri au hasard 
+     if(is.null(Z)){
+        list_X2=sample(qui,R) # melange R individus pri au hasard 
+     }else{
+        list_X2=which(colSums(Z)!=0)
+     }
     B[1,list_X2]=rpois(R,lambdapois)*(rep(-1,R)+2*rbinom(R,1,positive)) # 1ere ligne de B = ?????
     for(j in list_X2){#remplissage aléatoire de max_compl éléments de B sur chaque colonne à gauche
-      B[sample(qui[-c(list_X2-1)],size=max_compl),j]=(1/max_compl)*rpois(max_compl,lambdapois)*(rep(-1,max_compl)+2*rbinom(max_compl,1,positive))
+      if(is.null(Z)){
+         B[sample(qui[-c(list_X2-1)],size=max_compl),j]=(1/max_compl)*max(1,rpois(max_compl,lambdapois))*(rep(-1,max_compl)+2*rbinom(max_compl,1,positive))
+      }else{
+         compl_loc=colSums(Z)[j]
+         B[sample(qui[-c(list_X2-1)],size=compl_loc),j]=(1/compl_loc)*max(1,rpois(compl_loc,lambdapois))*(rep(-1,compl_loc)+2*rbinom(compl_loc,1,positive))
+      }
     }
     #ajout de G
     G=diag(p+1)
@@ -74,15 +98,13 @@ mixture_generator<-function(n=130,
   }else{
     A=generateurA_ou(Z=vraiZ,tp1=tp1,tp2=tp2,tp3=tp3,positive=positive,lambdapois=lambdapois,pb=pb,Amax=Amax,B=B)
   }
-
   composantes=rpois(p-R,lambda=lambda)
   composantes[composantes>n]=n #pas plus de composantes que de points
   composantes[composantes==0]=1#au moins une composante
   ploc=sum(composantes)
-  meanvar=NULL
-  sigmavar=NULL
+  
   if(is.null(meanvar)){
-    meanvar=rpois(ploc,ploc)*(rep(-1,ploc)+2*rbinom(ploc,1,positive))
+    meanvar=rpois(ploc,lambdapois)*(rep(-1,ploc)+2*rbinom(ploc,1,positive))
   }
   if(is.null(sigmavar)){
     sigmavar=5
@@ -118,10 +140,11 @@ mixture_generator<-function(n=130,
     }
   }
   rm(X1g)
-
   if(R>0){ 
     X[,-list_X2]=X1
-    if(gamma){
+    if(!is.null(R2)){
+       sigma_X=sqrt(((1-R2)*apply(X1%*%B[-list_X2,list_X2],2,var))/R2)
+    }else if(gamma){
       sigma_X=rgamma(R,shape=gammashape,scale=gammascale)
     }
     epsX[,list_X2]=matrix(rnorm(taille*R,mean=rep(0,times=R),sd=sigma_X),ncol=R,nrow=taille,byrow=T)
@@ -155,16 +178,23 @@ mixture_generator<-function(n=130,
   }  
   X=as.matrix(X)
   #names(X)=c("cste",paste("X_",1:p, sep=""))
-  if(scale){
+  if(scale){#centrage réduction de X avant son utilisation
      X=cbind(1,scale(X[,-1]))
   }
-  Y=X%*%A+rnorm(taille,mean=0,sd=sigma_Y)
+  if(!is.null(R2Y)){# le calcul tient donc compte du scaling
+     R2Y=min(R2Y,1)
+     R2Y=max(R2Y,0)
+     sigma_Y=sqrt(((1-R2Y)*apply(X%*%A,2,var))/R2)
+  }
+ 
+  Y=X%*%A+rnorm(taille,mean=0,sd=sigma_Y)#pas de scale sur Y, sinon on perd le vrai A
+ 
   X_appr=as.matrix(X[1:n,-1])
   X_test=as.matrix(X[(n+1):taille,-1])
   Y_appr=as.matrix(Y[1:n])
   Y_test=as.matrix(Y[(n+1):taille]) 
   return(list(X_appr=X_appr,Y_appr=Y_appr,A=A,B=B[,-1],Z=vraiZ,
-              X_test=data.frame(X_test),Y_test=Y_test,sigma_X=sigma_X,mixmod=composantes))   
+              X_test=data.frame(X_test),Y_test=Y_test,sigma_X=sigma_X,sigma_Y=sigma_Y,mixmod=composantes))   
 }
 
 

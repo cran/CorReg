@@ -21,7 +21,7 @@
 #'@param ... parameters to be passed (for Winitial).
 #'@return step 0:delete, 1: add, 2: stationnarity
 #'@export
-searchZ<-function(X=X,Z=NULL,Bic_null_vect=NULL,candidates=-1,reject=1,methode=1,p1max=5,p2max=NULL,Maxiter=1,plot=FALSE,best=TRUE,better=FALSE,random=TRUE,verbose=1,nb_opt_max=NULL,exact=TRUE,nbini=NULL,star=TRUE,clean=TRUE,...){
+searchZ<-function(X=X,Z=NULL,Bic_null_vect=NULL,candidates=-1,reject=0,methode=1,p1max=5,p2max=NULL,Maxiter=1,plot=FALSE,best=TRUE,better=FALSE,random=TRUE,verbose=1,nb_opt_max=NULL,exact=TRUE,nbini=NULL,star=TRUE,clean=TRUE,...){
   params=match.call()
   Wini=FALSE
   X=1*as.matrix(X)
@@ -29,8 +29,8 @@ searchZ<-function(X=X,Z=NULL,Bic_null_vect=NULL,candidates=-1,reject=1,methode=1
     p2max=ncol(X)+1 
   }
   if(star){
-     p2max=min(p2max,ncol(X)/2)
-     p1max=min(p1max,ncol(X)/2)
+     p2max=floor(min(p2max,ncol(X)/2))
+     p1max=floor(min(p1max,ncol(X)/2))
   }
   if(is.null(nb_opt_max)){
     nb_opt_max=Maxiter
@@ -38,7 +38,7 @@ searchZ<-function(X=X,Z=NULL,Bic_null_vect=NULL,candidates=-1,reject=1,methode=1
   if(is.null(Bic_null_vect)){
      Bic_null_vect=density_estimation(X=X,nbclustmax=10,verbose=FALSE,detailed=FALSE,mclust=TRUE)$BIC_vect
   }
-  if(is.null(nbini)){
+  if(is.null(nbini) ){
      if(is.null(Z)){
         Z=matrix(0,ncol=ncol(X),nrow=ncol(X))
      }
@@ -59,16 +59,13 @@ searchZ<-function(X=X,Z=NULL,Bic_null_vect=NULL,candidates=-1,reject=1,methode=1
         Wini=TRUE
      }
      res=list()
-     if(nbini>1){#first try with Zini matrix
+     if(nbini>1){#first try with provided Z matrix (or null if not provided)
         if(reject==0){#relax mode
-           resloc=.Call( "rechercheZ_relax",X,Z,Bic_null_vect,candidates,methode,p1max,p2max,Maxiter,plot,best,better,random,verbose,nb_opt_max,exact,star, PACKAGE = "CorReg")
+           res=.Call( "rechercheZ_relax",X,Z,Bic_null_vect,candidates,methode,p1max,p2max,Maxiter,plot,best,better,random,verbose,nb_opt_max,exact,star, PACKAGE = "CorReg")
         }else{# reject mode
-           resloc=.Call( "rechercheZ_rejet",X,Z,Bic_null_vect,candidates,methode,p1max,p2max,Maxiter,plot,best,better,random,verbose,nb_opt_max,exact,star, PACKAGE = "CorReg")
+           res=.Call( "rechercheZ_rejet",X,Z,Bic_null_vect,candidates,methode,p1max,p2max,Maxiter,plot,best,better,random,verbose,nb_opt_max,exact,star, PACKAGE = "CorReg")
         }
-        if(resloc$bic_opt<=min(res$bic_opt,BICnull)){
-           res=resloc
-        }
-        nbini=nbini-1
+        nbini=nbini-1#to finally have the exact number of tries
      }
      if(clean){
         resclean=cleanZ(X=X,Z=res$Z_opt,Bic_null_vect=Bic_null_vect,star=star,verbose=verbose)#nettoyage colonnes puis ponctuel
