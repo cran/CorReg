@@ -12,6 +12,7 @@
 #' @import spikeslab
 #' @import  rpart
 #' @import corrplot
+#' @import mvtnorm
 #' @useDynLib CorReg
 #' @export
 #' @param B the (p+1)xp matrix associated to Z and that contains the parameters of the sub-regressions
@@ -39,8 +40,8 @@
 #' @param g number of group of variables for clere
 #' @param explnew select the number of sub-regression to take into account (by AIC on the corresponding final model)
 #' 
-correg<-function (X = X, Y = Y, Z = NULL, B = NULL, compl = TRUE, expl = TRUE, explnew=TRUE,
-                pred = TRUE,prednew=FALSE,
+correg<-function (X = X, Y = Y, Z = NULL, B = NULL, compl = TRUE, expl = FALSE, explnew=FALSE,
+                pred = FALSE,prednew=FALSE,
                 select = "lar",
                 criterion = c("MSE", "BIC"),
                 X_test = NULL, Y_test = NULL, intercept = TRUE, 
@@ -61,7 +62,7 @@ correg<-function (X = X, Y = Y, Z = NULL, B = NULL, compl = TRUE, expl = TRUE, e
     returning=FALSE
   }
   if(final){pred=TRUE}
-if(explnew){compl=TRUE}
+if(explnew){compl=TRUE;expl=TRUE}
   criterion = criterion[1]
   if (is.null(Amax)) {
     Amax = ncol(X) + 1
@@ -190,8 +191,8 @@ if(explnew){compl=TRUE}
       #tri par R2 => nouvel I2 ordonné
       I2=I2[order(R2_vect,decreasing=FALSE)]#on commence par garder ce qui est mal expliqué par le reste (donc forte perte et peu de corrélations)
       #initialisation du résultat final (par le modèle complet déjà calculé, + AIC associé)
-      res$expl2$A=res$compl$A
-      resopt=res$compl$A
+      res$expl2$A=res$expl$A
+      resopt=res$expl$A
       AICopt=mon_AIC(theta=resopt,Y=Y,X=X,intercept=intercept)
       for (iexplnew in 1:length(I2)){
          I1=c(qui$I1,I2[1:iexplnew])#c'est ici que tout se joue
@@ -266,11 +267,8 @@ if(explnew){compl=TRUE}
       I1 = qui$I1
       I2 = qui$I2
     }#fin du nouvel explicatif
-    if (pred & length(I2)>0) {
-      if(length(I2)<2 & select!="NULL"){
-         select="lar"
-      }
-      
+#predictif
+    if (pred & length(I2)>0) {     
       if (is.null(B)) {
         B = hatB(Z = Z, X = X)
       }
@@ -286,9 +284,13 @@ if(explnew){compl=TRUE}
       }else if (select != "elasticnet"  & select != "ridge" & select != "adalasso"  & select!="clere" & select!="spikeslab") {
         lars_inj = lars(x = Xtilde, y = Ytilde, type = select, 
                         intercept = F)
-        A_inj = meilleur_lars(lars = lars_inj, X = Xtilde, 
+        if(max(lars_inj$R2)==0){
+           A_inj=rep(0,times=ncol(Xtilde))
+        }else{
+         A_inj = meilleur_lars(lars = lars_inj, X = Xtilde, 
                               Y = Ytilde, mode = criterion, intercept = F, 
                               K = K, groupe = groupe)$A
+        }
       }else if (select=="elasticnet") {
         lars_inj = renet(x = Xtilde, y = Ytilde, intercept = F, 
                         lambda = lambda)
@@ -377,6 +379,7 @@ if(explnew){compl=TRUE}
       res$pred$AIC=mon_AIC(theta=res$pred$A,Y=Y,X=X,intercept=intercept) 
       
     }
+print("ok")
     #nouveau prédictif####
     if (prednew) {
        if(length(I2)<2 & select=="adalasso"){
@@ -538,7 +541,7 @@ if(explnew){compl=TRUE}
       if(length(quifinal)==0){
          res$final=res$pred
       }else{
-         resA_final=correg(X=X[,quifinal],Y=Y,returning=F,final=F,groupe=groupe,K=K,intercept=intercept,criterion=criterion,select=select,compl=TRUE,expl=FALSE,pred=FALSE)
+         resA_final=correg(X=X[,quifinal],Y=Y,returning=F,final=F,groupe=groupe,K=K,intercept=intercept,criterion=criterion,select=select,compl=TRUE,expl=FALSE,pred=FALSE,explnew=FALSE)
          quifinal=which(A_pred!=0)
          res$final$A[quifinal]=resA_final$compl$A
          res$final$BIC = resA_final$compl$BIC
