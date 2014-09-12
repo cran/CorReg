@@ -7,7 +7,7 @@
 #' @import mclust 
 #' @import ridge
 #' @import MASS
-#' @import parcor
+# ' @import parcor
 #' @import  clere
 #' @import spikeslab
 #' @import  rpart
@@ -61,6 +61,7 @@ correg<-function (X = X, Y = Y, Z = NULL, B = NULL, compl = TRUE, expl = FALSE, 
   if(select=="NULL"){
     returning=FALSE
   }
+  if(select=="adalasso"){require(parcor)}
   if(final){pred=TRUE}
 if(explnew){compl=TRUE;expl=TRUE}
   criterion = criterion[1]
@@ -89,7 +90,7 @@ if(explnew){compl=TRUE;expl=TRUE}
                                 Y = Y, mode = criterion, intercept = intercept, 
                                 K = K, groupe = groupe, Amax = Amax)
     }else if(select=="adalasso"){
-       resada=adalasso(X=X,y=Y,k=K)    
+       resada=parcor::adalasso(X=X,y=Y,k=K)    
        if(intercept){
           if(is.null(resada$intercept.adalasso)){
              resada$intercept.adalasso=0
@@ -142,7 +143,7 @@ if(explnew){compl=TRUE;expl=TRUE}
                                mode = criterion, intercept = intercept, 
                                K = K, groupe = groupe, Amax = Amax)
     }else if(select=="adalasso"){
-       resada=adalasso(X=X[,I1],y=Y,k=K)    
+       resada=parcor::adalasso(X=X[,I1],y=Y,k=K)    
        if(intercept){
           if(is.null(resada$intercept.adalasso)){
              resada$intercept.adalasso=0
@@ -214,7 +215,7 @@ if(explnew){compl=TRUE;expl=TRUE}
                                       mode = criterion, intercept = intercept, 
                                       K = K, groupe = groupe, Amax = Amax)
           }else if(select=="adalasso"){
-             resada=adalasso(X=X[,I1],y=Y,k=K)    
+             resada=parcor::adalasso(X=X[,I1],y=Y,k=K)    
              if(intercept){
                 if(is.null(resada$intercept.adalasso)){
                    resada$intercept.adalasso=0
@@ -299,7 +300,7 @@ if(explnew){compl=TRUE;expl=TRUE}
                               Y = Ytilde, mode = criterion, intercept = F, 
                               K = K, groupe = groupe)$A
       }else if(select=="adalasso"){
-         resada=adalasso(X=Xtilde,y=Ytilde,k=K)    
+         resada=parcor::adalasso(X=Xtilde,y=Ytilde,k=K)    
          A_inj=c(resada$coefficients.adalasso)
          if(length(A_inj[A_inj!=0])>0){
             Xloc=Xtilde[,A_inj!=0]
@@ -313,8 +314,13 @@ if(explnew){compl=TRUE;expl=TRUE}
          A_inj=rep(0,times=ncol(Xtilde))
          A_inj[which(respike$gnet.scale!=0)]=OLS(X=Xtilde[,respike$gnet.scale!=0],Y=as.numeric(Ytilde),intercept=intercept)$beta 
       }else{#ridge
-        ridge_pred = linearRidge(Ytilde~0+.,data=data.frame(Xtilde))
-        A_inj=coef(ridge_pred)
+         if(ncol(Xtilde)>1){
+            ridge_pred = linearRidge(Ytilde~0+.,data=data.frame(Xtilde))
+            A_inj=coef(ridge_pred)
+         }else{
+            ridge_pred = OLS(X = Xtilde,Y=Ytilde,intercept=FALSE)#ridge has no sens on only one covariate
+            A_inj=ridge_pred$beta
+         }
       }
       A_pred = rep(0, times = ncol(X) + intercept)
       A_pred[I2 + intercept] = A_inj
@@ -335,7 +341,7 @@ if(explnew){compl=TRUE;expl=TRUE}
                                    Y = Ytildebis, mode = criterion, intercept = intercept, 
                                    K = K, groupe = groupe)$A
         }else if(select=="adalasso"){
-           resada=adalasso(X=X[,I1],y=Ytildebis,k=K)    
+           resada=parcor::adalasso(X=X[,I1],y=Ytildebis,k=K)    
            if(intercept){
               A_retour=c(resada$intercept.adalasso,resada$coefficients.adalasso)
            }else{
@@ -379,7 +385,6 @@ if(explnew){compl=TRUE;expl=TRUE}
       res$pred$AIC=mon_AIC(theta=res$pred$A,Y=Y,X=X,intercept=intercept) 
       
     }
-print("ok")
     #nouveau prédictif####
     if (prednew) {
        if(length(I2)<2 & select=="adalasso"){
@@ -417,7 +422,7 @@ print("ok")
                                       Y = Ytilde, mode = criterion, intercept = F, 
                                       K = K, groupe = groupe)$A
              }else if(select=="adalasso"){
-                resada=adalasso(X=Xtilde,y=Ytilde,k=K)    
+                resada=parcor::adalasso(X=Xtilde,y=Ytilde,k=K)    
                 A_inj=c(resada$coefficients.adalasso)
                 if(length(A_inj[A_inj!=0])>0){
                    Xloc=Xtilde[,A_inj!=0]
@@ -446,7 +451,7 @@ print("ok")
                                             Y = Ytildebis, mode = criterion, intercept = intercept, 
                                             K = K, groupe = groupe)$A
                 }else if(select=="adalasso"){
-                   resada=adalasso(X=X[,I1],y=Ytildebis,k=K)    
+                   resada=parcor::adalasso(X=X[,I1],y=Ytildebis,k=K)    
                    if(intercept){
                       A_retour=c(resada$intercept.adalasso,resada$coefficients.adalasso)
                    }else{
