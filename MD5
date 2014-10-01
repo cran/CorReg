@@ -1,4 +1,4 @@
-aaebdf0e644eeada6048e0bd7342bfda *DESCRIPTION
+ef4e4fa243e596ce78c6374745d62fe1 *DESCRIPTION
 d6e2e56fd5f45ee215c56d8bd58cf93a *NAMESPACE
 9c5600248a8aef11ead978fc0721916c *NEWS
 ed3fbca613a5946ef993bdfaf7465b89 *R/A_clere.R
@@ -10,7 +10,7 @@ f1dafbc66496d6eaabc5fe96fd901e1c *R/BicZ.R
 e021eda2ac2f4ec7db35ce94eced7fda *R/BicZcurve.R
 dc07921f5310b26c29f96b1b2d0a2e73 *R/CVMSE.R
 374137edc1ecc51bdd904fb0b90e01a4 *R/CompNoms.R
-062d27e5c9fcf7d1f1e1a172f3409683 *R/CorReg-package.R
+bf57626de401acac38a5a7ba693d5d03 *R/CorReg-package.R
 56edc2deee4f7345adae7b949a5ae445 *R/Estep.R
 5d9d815518a40aae6dc88a298a8e673f *R/GM_Loglikelihood.R
 128ec3f6ab8425310f90851f8f0cf3b3 *R/Gibbs.R
@@ -27,7 +27,7 @@ c3d2da50c0b00d6fecff05f4f8b1be80 *R/MakeH.R
 6b9d37255f753a14e0bd98ef9077cc8f *R/Mstep.R
 c9f75999e4116bc2778ec0a8c82e3b74 *R/OLS.R
 acf48b812309434076eddc11df7ea12b *R/ProbaZ.R
-04ef1a85c294fcad804adfd4ebba6e5b *R/R2Z.R
+379169e70f798efb285301d0687b7a38 *R/R2Z.R
 27e05c3fc92747709728f0f42acd5004 *R/SEM.R
 442c9fc5be12a5a983d0e9ef98da2189 *R/Terminator.R
 57839be61a6372159c187aadeda7655f *R/WhoIs.R
@@ -95,7 +95,7 @@ a4731c5fdffebead06e3d59b5e10d5ea *R/searchZ.R
 ca757a49a86ffb405dcc999e76eb719e *man/BicZ.Rd
 80cf2b61e2e1805ee79f2a0e8e6ba2e5 *man/BicZcurve.Rd
 c857442734ac3eed56e079db45251bb4 *man/CVMSE.Rd
-0939f817e55e8debba0003ac70a446e8 *man/CorReg-package.Rd
+3423b155527c10841e2dea667b356ac3 *man/CorReg-package.Rd
 f777f471d8615f9104f85830aae43cb4 *man/Estep.Rd
 661c68a9d590f8fb2fa52f1e2f511b1d *man/MSEZ.Rd
 ea3a0fff9885f561fe10a948de3eb3a6 *man/MSE_loc.Rd
@@ -170,13 +170,13 @@ a16a09374ecf7eee9a05bdeece2cd3f0 *src/kronecker_sum_cpp.cpp
 a4acf11a26d7dd2c834ad5e62a117f1a *src/kronecker_sum_cpp.h
 ca5241b163d8b3b8ea3fd61a51d9cd74 *src/modsparse_cpp.cpp
 cdbaffffeae96e2285f214ece9dfb899 *src/modsparse_cpp.h
-576a085baebe79a3e114575463acd435 *src/rechercheZ.cpp
+24661694a9b06adf62826534e65a812c *src/rechercheZ.cpp
 61e1ab43b72c3fcb92bd3b681f805c22 *src/rechercheZ.h
-6208ead4ef3ce8e143a50c12d148517a *src/rechercheZ_rejet.cpp
+d1cbbb6ebedb63d4e1f82d8734a12d2a *src/rechercheZ_rejet.cpp
 1a6c64746987f19737bb14726755fbc7 *src/rechercheZ_rejet.h
-6bbc8db935f573cf9c3a5f4500354a69 *src/rechercheZ_relax.cpp
+4d3bc039b05220e59d4876e2230de228 *src/rechercheZ_relax.cpp
 7e5fbfcf576fdc9e6c5d4fe581b6e0be *src/rechercheZ_relax.h
 0d76e8fb9efc63cf448f04db870df9a8 *src/rechercheZ_sparse_rejet.cpp
 1cf69de2989ed9188c14762093c17d9a *src/rechercheZ_sparse_rejet.h
-651ef9903278a9be2f14db93b83af0e7 *src/rechercheZ_sparse_relax.cpp
+a3243ae55696abe9ca8c58b0511ee3ed *src/rechercheZ_sparse_relax.cpp
 0cb68999d470b4d181de35c743a508d0 *src/rechercheZ_sparse_relax.h

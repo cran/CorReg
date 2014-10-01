@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <math.h>
-#include <Rmath.h>
+//#include <Rmath.h>
 using namespace Rcpp ;
 using namespace Eigen;
 using namespace std;
@@ -32,7 +32,7 @@ SEXP rechercheZ(SEXP X,SEXP Z,SEXP bic_vide_vect,SEXP methode_tirage,SEXP method
   Eigen::MatrixXd list_cand;//matrice qui contient les coordonnées des candidats
   int nbcand;//nombre de candidats
   int nb_opt;//nombre de fois ou on a retrouve bicbest
-  int k;//nombre du tirage aleatoire (liste candidats)
+  int k=0;//nombre du tirage aleatoire (liste candidats)
   int compte;//permet de cree la matrice liste en désignant le numéro du candidat (liste candidats)
   int i;//coordonnée (x ou y) des candidats (liste candidats)
   int rand1;//nombre aleatoire pour la 3ème méthode de tirage des candidats (liste candidats)
@@ -118,7 +118,7 @@ SEXP rechercheZ(SEXP X,SEXP Z,SEXP bic_vide_vect,SEXP methode_tirage,SEXP method
   //liste candidats (couples [i,j])
     if (imet_tirage[0]==0)//methode de changement de la ligne et de la colonne
     {
-      k= int(runif(0,p)[0]);//on tire un numero aleatoire pour savoir quel est la ligne et la colonne de candidats
+      k= int(p*runif(1)[0]);//on tire un numero aleatoire pour savoir quel est la ligne et la colonne de candidats
       for(i=0;i<p;i++)
       {
         if(i!=k)//on ne veut pas avoir de 1 sur la diagonale
@@ -134,7 +134,7 @@ SEXP rechercheZ(SEXP X,SEXP Z,SEXP bic_vide_vect,SEXP methode_tirage,SEXP method
     }
     else if (imet_tirage[0]==-1)//seulement la colonne
     {
-      k=int(runif(0,p)[0]);
+      k=int(p*runif(1)[0]);
       for(i=0;i<p;i++)
       {
         if(i!=k)
@@ -149,8 +149,8 @@ SEXP rechercheZ(SEXP X,SEXP Z,SEXP bic_vide_vect,SEXP methode_tirage,SEXP method
     {
       for(i=0;i<nbcand;i++)
       {
-        rand1=int(runif(0,p)[0]);//nombres aleatoire pour avoir le numero de la ligne
-        rand2=int(runif(0,p)[0]);//nombres aleatoire pour avoir le numero de la colonne
+        rand1=int(p*runif(1)[0]);//nombres aleatoire pour avoir le numero de la ligne
+        rand2=int(p*runif(1)[0]);//nombres aleatoire pour avoir le numero de la colonne
         if (rand1==rand2)//on ne veut pas de 1 sur la diagonale
         {
           if(rand1<p-1)
