@@ -32,11 +32,11 @@ SEXP rechercheZ_rejet(SEXP X,SEXP Z,SEXP bic_vide_vect,SEXP methode_tirage,SEXP 
   Eigen::MatrixXd Zopt;//meilleur Z obtenu
   double Bicbest;//BIC associÃ© au meilleur modÃ¨le
   Eigen::VectorXd bicvect;//vecteur BIC des matrices Z retenues
-  Eigen::MatrixXd newZ;//matrice Z modifié à chaque Ã©tapes
+  Eigen::MatrixXd newZ;//matrice Z modifie a chaque etapes
   Eigen::MatrixXd list_cand;//matrice qui contient les coordonnÃ©es des candidats
   int nbcand=0;//nombre de candidats
   int nb_opt;//nombre de fois ou on a retrouve bicbest
-  int step_opt=0;//étape où l'on découvre BIC_opt
+  int step_opt=0;//etape ou l'on decouvre BIC_opt
   int sumZ=0;
   int k;//nombre du tirage aleatoire (liste candidats)
   int compte;//permet de cree la matrice liste en dÃ©signant le numÃ©ro du candidat (liste candidats)
@@ -198,7 +198,7 @@ SEXP rechercheZ_rejet(SEXP X,SEXP Z,SEXP bic_vide_vect,SEXP methode_tirage,SEXP 
           }
         }
       }
-      if(nbcand==0)//aucun candidat donc on arrête
+      if(nbcand==0)//aucun candidat donc on arrete
       {
         step=imaxiter[0]+10;
       }

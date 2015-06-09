@@ -1,4 +1,4 @@
-#' Estimates the response variable using a structure
+#' Linear regression using CorReg's method, with variable selection.
 #' @import Rcpp
 #' @import Rmixmod
 #' @import lars
@@ -16,35 +16,93 @@
 # ' @import rtkpp
 #' @useDynLib CorReg
 #' @export
-#' @param B the (p+1)xp matrix associated to Z and that contains the parameters of the sub-regressions
-#' @param lambda parameter for elasticnet (quadratic penalty)
-#' @param X the data matrix (covariates) without the intercept
+#' @param B The (d+1)xd matrix associated to Z and that contains the parameters of the sub-regressions
+#' @param lambda (optional) parameter for elasticnet (quadratic penalty) if select="elasticnet"
+#' @param X The data matrix (covariates) without the intercept
 #' @param Y The response variable vector
 #' @param Z The structure (adjacency matrix) between the covariates
-#' @param compl boolean to decide if the complete modele is computed
-#' @param expl boolean to decide if the explicative model is in the output
-#' @param pred boolean to decide if the predictive model is computed
+#' @param compl (boolean) to decide if the complete modele is computed
+#' @param expl (boolean) to decide if the explicative model is in the output
+#' @param pred (boolean) to decide if the predictive model is computed
 #' @param select selection method in ("lar","lasso","forward.stagewise","stepwise", "elasticnet", "NULL","ridge","adalasso","clere","spikeslab")
 #' @param criterion the criterion used to compare the models
 #' @param K the number of clusters for cross-validation
-#' @param groupe a vector to define the groups used for cross-validation (to obtain a reproductible result)
-#' @param Amax the maximum number of covariates in the final model
-#' @param returning boolean : second predictive step (selection on I1 knowing I2 coefficients)
+#' @param groupe a vector of integer to define the groups used for cross-validation (to obtain a reproductible result)
+#' @param Amax the maximum number of non-zero coefficients in the final model
+# ' @param returning boolean: second predictive step (selection on I1 knowing I2 coefficients)
 #' @param X_test validation sample
 #' @param Y_test response for the validation sample
 #' @param intercept boolean. If FALSE intercept will be set to 0 in each model.
 #' @param alpha Coefficients of the explicative model to coerce the predictive step. if not NULL explicative step is not computed.
-#' @param g number of group of variables for clere
-#' @param compl2 boolean to compute regression (OLS only) upon [X_f,epsilon] instead of [X_f,X_r]
-#' @param explnew alternative estimation
-#Attention cette fonction dégage une puissance phénoménale (it's over 9000!)
-correg<-function (X = NULL, Y = NULL, Z = NULL, B = NULL, compl = TRUE, expl = FALSE, pred = FALSE,
-                select = "lar",
-                criterion = c("MSE", "BIC"),
-                X_test = NULL, Y_test = NULL, intercept = TRUE, 
-                K = 10, groupe = NULL, Amax = NULL, lambda = 1,returning=FALSE,
-                alpha=NULL,g=5,compl2=FALSE,explnew=FALSE) 
-{
+#' @param g (optional) number of group of variables for clere if select="clere"
+# ' @param compl2 boolean to compute regression (OLS only) upon [X_f,epsilon] instead of [X_f,X_r]
+# ' @param explnew alternative estimation
+#' @description Computes three regression models: Complete (regression on the wole dataset X), marginal (regression using only independant covariates: \code{X[,colSums(Z)==0]}) and plug-in (sequential regression based on the marginal model and then use redundant covariates by plug-in, 
+#' with a regression on the residuals of the marginal model by the residuals of the sub-regressions). Each regression can be computed with variable selection (for example the lasso).
+#' @return a list that contains:
+#' \item{compl}{Results associated to the regression on X}
+#' \item{expl}{Results associated to the marginal regression on explicative covariates (defined by colSums(Z)==0)}
+#' \item{pred}{Results associated to the plug-in regression model.}
+#' \item{compl$A}{Vector of the regression coefficients (the first is the intercept).(also have expl$A and pred$A) }
+#' \item{compl$BIC}{BIC criterion associated to the model (also have expl$A and pred$A) }
+#' \item{compl$AIC}{AIC criterion associated to the model (also have expl$A) }
+#' \item{compl$CVMSE}{Cross-validated MSE associated to the model (also have expl$A) }
+#Attention cette fonction degage une puissance phenomenale (it's over 9000!)
+# correg<-function (X = NULL, Y = NULL, Z = NULL, B = NULL, compl = TRUE, expl = FALSE, pred = FALSE,
+#                 select = "lar",
+#                 criterion = c("MSE", "BIC"),
+#                 X_test = NULL, Y_test = NULL, intercept = TRUE, 
+#                 K = 10, groupe = NULL, Amax = NULL, lambda = 1,returning=FALSE,
+#                 alpha=NULL,g=5,compl2=FALSE,explnew=FALSE) 
+#' @examples
+#' \dontrun{
+#' require(CorReg)
+#'    #dataset generation
+#'    base=mixture_generator(n=15,p=10,ratio=0.4,tp1=1,tp2=1,tp3=1,positive=0.5,
+#'                           R2Y=0.8,R2=0.9,scale=TRUE,max_compl=3,lambda=1)
+
+#'    X_appr=base$X_appr #learning sample
+#'    Y_appr=base$Y_appr #response variable for the learning sample
+#'    Y_test=base$Y_test #responsee variable for the validation sample
+#'    X_test=base$X_test #validation sample
+#'    TrueZ=base$Z#True generative structure (binary adjacency matrix)
+#'    
+#'    #Regression coefficients estimation
+#'     select="lar"#variable selection with lasso (using lar algorithm)
+#'    resY=correg(X=X_appr,Y=Y_appr,Z=TrueZ,compl=TRUE,expl=TRUE,pred=TRUE,
+#'                select=select,K=10)
+#'    
+#'    #MSE computation
+#'    MSE_complete=MSE_loc(Y=Y_test,X=X_test,A=resY$compl$A)#classical model on X
+#'    MSE_marginal=MSE_loc(Y=Y_test,X=X_test,A=resY$expl$A)#reduced model without correlations
+#'    MSE_plugin=MSE_loc(Y=Y_test,X=X_test,A=resY$pred$A)#plug-in model
+#'    MSE_true=MSE_loc(Y=Y_test,X=X_test,A=base$A)# True model
+#'    
+#'    
+#'    #MSE comparison
+#'    MSE=data.frame(MSE_complete,MSE_marginal,MSE_plugin,MSE_true)
+#'    MSE#estimated structure
+#'    compZ$true_left;compZ$false_left
+#'    
+#'   barplot(as.matrix(MSE),main="MSE on validation dataset", sub=paste("select=",select))
+#'   abline(h=MSE_complete,col="red")
+#'    }
+
+
+
+   correg<-function (X = NULL, Y = NULL, Z = NULL, B = NULL, compl = TRUE, expl = FALSE, pred = FALSE,
+                     select = "lar",
+                     criterion = c("MSE", "BIC"),
+                     X_test = NULL, Y_test = NULL, intercept = TRUE, 
+                     K = 10, groupe = NULL, Amax = NULL, lambda = 1,
+                     alpha=NULL,  g=5) 
+      
+   
+   {
+      compl2=FALSE
+      returning=FALSE
+      explnew=FALSE
+    
   if(is.null(X)){
      dat<- data.frame(t=seq(0, 2*pi, by=0.1) )
      xhrt <- function(t) 16*sin(t)^3
@@ -57,6 +115,7 @@ correg<-function (X = NULL, Y = NULL, Z = NULL, B = NULL, compl = TRUE, expl = F
      title(main="I Love CorReg !")
      return("I Love CorReg !")
   }
+  OLS=OLS
    res = list()
   X = 1*as.matrix(X)
   K = abs(K)

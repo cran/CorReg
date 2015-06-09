@@ -11,7 +11,7 @@ loglikcond<-function(X=X,mui=mui,Sigma=Sigma,M=M,i=i,Zc=Zc){
       mu=mui[quimank_i]+prodmat%*%(X[i,-quimank_i]-mui[-quimank_i])
       sigma=Sigma[quimank_i,quimank_i]-prodmat%*%t(Sigma_M_obs)#matrice variance-covariance
       res=res/dmvnorm(x=X[i,quimank_i],mean = mu,sigma=sigma)#on divise par la vraisemblance conditionnelle des manquants pour obtenir la marginale
-      #attention sigma minuscule dans les deux lignes précédentes  
+      #attention sigma minuscule dans les deux lignes precedentes  
    }
    return(log(res))
 }
