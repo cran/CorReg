@@ -75,7 +75,9 @@ mixture_generator<-function(n=130,
 ){
    pb=0
    if(is.null(Z)){
-      max_compl=min(max_compl,p)
+      max_compl=min(max_compl,p-1)
+      max_compl=min(max_compl,floor(1+(p-ratio*p)))
+      
    }else{
       max_compl=max(colSums(Z))
    }

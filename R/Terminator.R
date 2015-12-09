@@ -9,7 +9,8 @@
 
 #' @examples
 #'    \dontrun{
-
+#'   rm(list=ls())#clean the workspace
+#'   
 #'    data<-mtcars
 #'    require(CorReg)
 #'   datamiss=Terminator(target = data,wrath=0.05)#5% of missing values

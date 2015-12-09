@@ -19,12 +19,14 @@
 #' \item{details}{list of matrices that describe each Gaussian Mixture (proportions, means and variances)}
 #' @examples
 #' \dontrun{
+#'   rm(list=ls())#clean the workspace
+#'   
 #' require(CorReg)
 #'    #dataset generation
 #'    base=mixture_generator(n=150,p=10,valid=0,ratio=0.4,tp1=1,tp2=1,tp3=1,positive=0.5,
 #'                           R2Y=0.8,R2=0.9,scale=TRUE,max_compl=3,lambda=1)
 #'    X_appr=base$X_appr #learning sample
-#'  density=density_estimation(X = X, detailed = TRUE)#estimation of the marginal densities
+#'  density=density_estimation(X = X_appr, detailed = TRUE)#estimation of the marginal densities
 #'density$BIC_vect #vector of the BIC (one per variable)
 #' density$BIC #global value of the BIC (sum of the BICs)
 #' density$nbclust #vector of the numbers of components.

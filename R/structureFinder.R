@@ -39,6 +39,8 @@
 #'
 #' @examples
 #'\dontrun{
+#'   rm(list=ls())#clean the workspace
+#'   
 #' require(CorReg)
 #'    #dataset generation
 #'    base=mixture_generator(n=15,p=10,ratio=0.4,tp1=1,tp2=1,tp3=1,positive=0.5,
@@ -95,8 +97,8 @@ structureFinder<-function(X=X,Z=NULL,Bic_null_vect=NULL,candidates=-1,reject=0,m
     p2max=ncol(X)+1 
   }
   if(star){
-     p2max=floor(min(p2max,ncol(X)/2))
-     p1max=floor(min(p1max,ncol(X)/2))
+     p2max=floor(min(p2max,ncol(X)*0.644))
+     p1max=floor(min(p1max,ncol(X)*0.644))
   }
   if(is.null(nb_opt_max)){
     nb_opt_max=Maxiter

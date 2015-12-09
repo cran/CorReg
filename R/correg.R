@@ -2,11 +2,13 @@
 #' @import Rcpp
 #' @import Rmixmod
 #' @import lars
+#' @import glmnet
 #' @import elasticnet
 #' @import Matrix
 #' @import mclust 
-#' @import ridge
+#' @import glmnet
 #' @import MASS
+#' @import methods
 # ' @import parcor
 # '  @import  clere
 # ' @import spikeslab
@@ -14,10 +16,14 @@
 #' @import corrplot
 #' @import mvtnorm
 # ' @import rtkpp
+#' @importFrom grDevices col2rgb gray rgb colors
+#' @importFrom utils install.packages
+#' @importFrom graphics abline arrows boxplot legend matplot par points rect text title
+#' @importFrom stats AIC BIC aov as.formula chisq.test coef confint.default cor dnorm lm pf predict qnorm qt rbinom rgamma rmultinom rnorm rpois rstudent runif sd var
 #' @useDynLib CorReg
 #' @export
 #' @param B The (d+1)xd matrix associated to Z and that contains the parameters of the sub-regressions
-#' @param lambda (optional) parameter for elasticnet (quadratic penalty) if select="elasticnet"
+#' @param lambda (optional) parameter for elasticnet or ridge (quadratic penalty) if select="elasticnet" or "ridge".
 #' @param X The data matrix (covariates) without the intercept
 #' @param Y The response variable vector
 #' @param Z The structure (adjacency matrix) between the covariates
@@ -179,8 +185,9 @@
           res$compl$A[respike$gnet.scale!=0]=OLS(X=X[,respike$gnet.scale!=0],Y=as.numeric(Y),intercept=intercept)$beta
        }
    }else{#ridge
-      res_ridge = linearRidge(Y~.,data=data.frame(X))
-      res$compl$A=coef(res_ridge)
+      #res_ridge = linearRidge(Y~.,data=data.frame(X))
+      res_ridge=glmnet(as.matrix(X),Y,alpha=0)
+      res$compl$A=c(matrix(coef(res_ridge,lambda)))
     }
     res$compl$BIC = BicTheta(X = X, Y = Y, intercept = intercept, 
                              beta = res$compl$A)
@@ -232,8 +239,10 @@
           res$expl$A[respike$gnet.scale!=0]=OLS(X=X[,I1][,respike$gnet.scale!=0],Y=as.numeric(Y),intercept=intercept)$beta
        }
     }else{#ridge
-      lars_expl = linearRidge(Y~.,data=data.frame(X[,I1]))
-      res$expl$A=coef(lars_expl)
+      #lars_expl = linearRidge(Y~.,data=data.frame(X[,I1]))
+      res_ridge=glmnet(as.matrix(X[,I1]),Y,alpha=0)
+      res$expl$A=c(matrix(coef(res_ridge,lambda)))
+      #res$expl$A=coef(lars_expl)
     }
     if(is.null(alpha)){
        A_expl = rep(0, times = ncol(X) + intercept)
@@ -298,8 +307,10 @@
          A_inj[which(respike$gnet.scale!=0)]=OLS(X=Xtilde[,respike$gnet.scale!=0],Y=as.numeric(Ytilde),intercept=intercept)$beta 
       }else{#ridge
          if(ncol(Xtilde)>1){
-            ridge_pred = linearRidge(Ytilde~0+.,data=data.frame(Xtilde))
-            A_inj=coef(ridge_pred)
+            res_ridge=glmnet(as.matrix(Xtilde),Y,alpha=0,intercept=FALSE)
+            A_inj=c(matrix(coef(res_ridge,lambda)))
+            #ridge_pred = linearRidge(Ytilde~0+.,data=data.frame(Xtilde))
+            #A_inj=coef(ridge_pred)
          }else{
             ridge_pred = OLS(X = Xtilde,Y=Ytilde,intercept=FALSE)#ridge has no sens on only one covariate
             A_inj=ridge_pred$beta
@@ -343,8 +354,10 @@
                res$compl$A[respike$gnet.scale!=0]=OLS(X=X[,I1][,respike$gnet.scale!=0],Y=as.numeric(Y),intercept=intercept)$beta
             }
          }else{#ridge
-          ridge_pred = linearRidge(Ytildebis~.,data=data.frame(X[,I1]))
-          A_retour=coef(ridge_pred)
+          #ridge_pred = linearRidge(Ytildebis~.,data=data.frame(X[,I1]))
+          #A_retour=coef(ridge_pred)
+          res_ridge=glmnet(as.matrix(X[,I1]),Ytildebis,alpha=0,intercept=FALSE)
+          A_retour=c(matrix(coef(res_ridge,lambda)))
         }
         
         if(intercept){

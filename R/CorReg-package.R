@@ -10,10 +10,12 @@
 
 #' @author Maintainer: Clement THERY <clement.thery@@arcelormittal.com>
 
-#' @references coming soon. see \url{http://www.correg.org} to read the associated PhD Thesis.
+#' @references Model-based covariable decorrelation in linear regression (CorReg): application to missing data and to steel industry. C Thery - 2015. see \url{http://www.theses.fr/2015LIL10060} to read the associated PhD Thesis.
 #' @keywords package
 
+
 #' @examples
+#'    \dontrun{
 #' require(CorReg)
 #'    #dataset generation
 #'    base=mixture_generator(n=15,p=10,ratio=0.4,tp1=1,tp2=1,tp3=1,positive=0.5,
@@ -25,6 +27,7 @@
 #'    X_test=base$X_test #validation sample
 #'    
 #'    TrueZ=base$Z#True generative structure (binary adjacency matrix)
+#'    #Z_i,j=1 means that Xj linearly depends on Xi
 #'    
 #'    #density estimation for the MCMC (with Gaussian Mixtures)
 #'    density=density_estimation(X=X_appr,nbclustmax=10,detailed=TRUE)
@@ -64,7 +67,7 @@
 #'    MSE=data.frame(MSE_complete,MSE_marginal,MSE_plugin,MSE_true)
 #'    MSE#estimated structure
 #'    compZ$true_left;compZ$false_left
-#'    \dontrun{
+
 #'   barplot(as.matrix(MSE),main="MSE on validation dataset", sub=paste("select=",select))
 #'   abline(h=MSE_complete,col="red")
 #'    }

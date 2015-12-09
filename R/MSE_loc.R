@@ -7,8 +7,8 @@
 #' @param A the vector of coefficients
 #' @param intercept (boolean) to add a column of 1 to \code{X} if \code{A} contains an intercept and \code{X} doesn't.
 #' @return the Mean Squared Error observed on \code{X} when using \code{A} coefficients to predict \code{Y}.
+#' 
 #'  @examples
-#' \dontrun{
 #'  require(CorReg)
 #'    #dataset generation
 #'    base=mixture_generator(n=15,p=5,valid=100,scale=TRUE)
@@ -19,7 +19,6 @@
 #'    A=lm(Y_appr~X_appr)$coefficients
 #' MSE_loc(Y=Y_appr,X=X_appr,A=A)#MSE on the learning dataset
 #' MSE_loc(Y=Y_test,X=X_test,A=A)#MSE on the validation sample
-#'    }
 MSE_loc<-function(Y=Y,X=X,A=A,intercept=T){
   if(intercept){
     X=as.matrix(cbind(1,X))
