@@ -115,11 +115,17 @@ structureFinder<-function(X=X,Z=NULL,Bic_null_vect=NULL,candidates=-1,reject=0,m
      }
      if(reject==0){#relax mode
         res=.Call( "rechercheZ_relax",X,Z,Bic_null_vect,candidates,methode,p1max,p2max,Maxiter,plot,best,better,random,verbose,nb_opt_max,exact,star, PACKAGE = "CorReg")
-        return(res)
      }else{# reject mode
         res=.Call( "rechercheZ_rejet",X,Z,Bic_null_vect,candidates,methode,p1max,p2max,Maxiter,plot,best,better,random,verbose,nb_opt_max,exact,star, PACKAGE = "CorReg")
-        return(res)
      }
+     
+     if(clean){
+        resclean=cleanZ(X=X,Z=res$Z_opt,Bic_null_vect=Bic_null_vect,star=star,verbose=verbose)#nettoyage colonnes puis ponctuel
+        res$Z_opt=resclean$Z_opt
+        res$bic_opt=resclean$bic_opt
+     }
+     
+     
   }else{
      BICnull=sum(Bic_null_vect)
      if(!("W" %in% names(params))){
@@ -153,18 +159,19 @@ structureFinder<-function(X=X,Z=NULL,Bic_null_vect=NULL,candidates=-1,reject=0,m
         }else{# reject mode
            resloc=.Call( "rechercheZ_rejet",X,Z,Bic_null_vect,candidates,methode,p1max,p2max,Maxiter,plot,best,better,random,verbose,nb_opt_max,exact,star, PACKAGE = "CorReg")
         }
-        if(length(res)==0){res=resloc}
-        if(resloc$bic_opt<=min(res$bic_opt,BICnull)){
+        if(clean){
+           resclean=cleanZ(X=X,Z=resloc$Z_opt,Bic_null_vect=Bic_null_vect,star=star,verbose=verbose)#nettoyage colonnes puis ponctuel
+           resloc$Z_opt=resclean$Z_opt
+           resloc$bic_opt=resclean$bic_opt
+        }
+        if(length(res)==0){res=resloc}#si c'est la premiere ini, on la sauvegarde
+        if(resloc$bic_opt<=min(res$bic_opt,BICnull)){#si amelioration on sauvegarde
            res=resloc
         }
      }
-     if(clean){
-        resclean=cleanZ(X=X,Z=res$Z_opt,Bic_null_vect=Bic_null_vect,star=star,verbose=verbose)#nettoyage colonnes puis ponctuel
-        res$Z_opt=resclean$Z_opt
-        res$bic_opt=resclean$bic_opt
-     }
-     res$Bic_null_vect=Bic_null_vect
-     return(res)
+     
+     
   }
-
-}
+  res$Bic_null_vect=Bic_null_vect
+  return(res)
+  }

@@ -19,7 +19,7 @@
 #' @importFrom grDevices col2rgb gray rgb colors
 #' @importFrom utils install.packages
 #' @importFrom graphics abline arrows boxplot legend matplot par points rect text title
-#' @importFrom stats AIC BIC aov as.formula chisq.test coef confint.default cor dnorm lm pf predict qnorm qt rbinom rgamma rmultinom rnorm rpois rstudent runif sd var
+#' @importFrom stats AIC BIC aov as.formula chisq.test coef confint.default kruskal.test cor dnorm lm pf predict qnorm qt rbinom rgamma rmultinom rnorm rpois rstudent runif sd var
 #' @useDynLib CorReg
 #' @export
 #' @param B The (d+1)xd matrix associated to Z and that contains the parameters of the sub-regressions

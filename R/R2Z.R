@@ -5,7 +5,7 @@
 # ' @param adj boolean to choose between adjusted R-squared and classical one
 # ' @param crit to choose between the R-squared and the F statistic (p-value)
 # ' @export 
-R2Z<-function(Z=Z,X=X,methode=1,adj=F,crit=c("R2","F","sigmaX")){
+R2Z<-function(Z=Z,X=X,adj=F,crit=c("R2","F","sigmaX")){
   p=ncol(Z)
   res=rep(0,times=p)
   crit=crit[1]

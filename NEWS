@@ -1,3 +1,4 @@
+#1.1.6 : Kruskal-Wallis test to manage non-normal distributions in the BoxPlot function
 #1.1.0 : improved imports for basic functions
 #1.0.7 :
    remove ridge dependency by using MASS function lm.ridge

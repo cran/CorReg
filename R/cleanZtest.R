@@ -1,5 +1,12 @@
-# ' Clean Z's columns based on p-values (coefficients or global)
-cleanZtest<-function (Z = Z, X = X, pvalmin = 0.05, methode = 1, adj = T,global=F,bonferroni=F) 
+#' Clean Z's columns based on p-values (coefficients or global)
+#' @description This function cleans the structure of correlations by setting to 0 the coefficients in the sub-regressions that are associated to a p-value below the "pvalmin" threshold.
+#' @param Z the binary matrix describing the sub-regression structure (as given by the "structureFinder" function).
+#' @param X the dataset on which we have the sub-regression structure Z.
+#' @param pvalmin the threshold on coefficients p-valuesto clean the structure.
+#' @param global boolean. If TRUE the threshold is only on the F statistic for each sub-regression, not on each coefficients. So it will only remove entire sub-regressions.
+#' @param bonferroni boolean to use bonferroni correction on the pvalmin parameter to avoid multiple testing issues.
+#' @export
+cleanZtest<-function (Z = Z, X = X, pvalmin = 0.05, global=F,bonferroni=F) 
 {
   if(global){
     if(bonferroni){

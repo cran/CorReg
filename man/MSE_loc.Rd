@@ -2,7 +2,7 @@
 % Please edit documentation in R/MSE_loc.R
 \name{MSE_loc}
 \alias{MSE_loc}
-\title{simple MSE function}
+\title{Simple MSE function}
 \usage{
 MSE_loc(Y = Y, X = X, A = A, intercept = T)
 }

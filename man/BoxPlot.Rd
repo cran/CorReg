@@ -2,9 +2,9 @@
 % Please edit documentation in R/BoxPlot.R
 \name{BoxPlot}
 \alias{BoxPlot}
-\title{Matplot with curves comparison by background colors.}
+\title{Boxplot with confidence interval and ANOVA on the plot.}
 \usage{
-BoxPlot(num, grp, data = NULL, AnoVa = TRUE, risk = 0.05,
+BoxPlot(num, grp = NULL, data = NULL, AnoVa = TRUE, risk = 0.05,
   lang = c("en,fr"), ...)
 }
 \arguments{
@@ -14,7 +14,7 @@ BoxPlot(num, grp, data = NULL, AnoVa = TRUE, risk = 0.05,
 
 \item{data}{a data.frame (or list) from which the variables in formula should be taken.}
 
-\item{AnoVa}{boolean to compute or not anova (when multiple groups) to see if they differ in mean.}
+\item{AnoVa}{boolean to compute or not anova (when multiple groups) to see if they differ in mean.If false the Kruskal-Wallis Rank Sum test is computed instead.}
 
 \item{risk}{the risk value used for confidence intervals}
 
@@ -23,7 +23,7 @@ BoxPlot(num, grp, data = NULL, AnoVa = TRUE, risk = 0.05,
 \item{...}{Other graphical parameters}
 }
 \description{
-Plot the columns of one matrix against the columns of another, with conditionnal background for easier comparison of curves.
+classical boxplot function improved with integrated confidence level on the mean for each group ploted on the graph and also ANOVA with p-value and its interpretation given in the legend.
 }
 \examples{
     \dontrun{

@@ -1,4 +1,4 @@
-#' simple MSE function
+#' Simple MSE function
 #' @description
 #' This function computes the MSE (Mean Squared Error) of prediction associated to a vector of coefficients \code{A} used to predict a response variable \code{Y} by linear regression on \code{X}, with an intercept or not.
 #' @export
