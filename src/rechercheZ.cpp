@@ -87,9 +87,9 @@ SEXP rechercheZ(SEXP X,SEXP Z,SEXP bic_vide_vect,SEXP methode_tirage,SEXP method
   Eigen::VectorXd stock_BIC;//vecteur qui contient le BIC de tout les candidats (stock)
   double sumbic;//BIC de chaque etapes
   
-  Eigen::VectorXd bic_etape (imaxiter[0]);//vecteur qui stock le BIC de chaque etapes
-  Eigen::VectorXd complexite_etape (imaxiter[0]);//vecteur qui stock la compléxité de Z a chaque etapes
-  Eigen::VectorXd etape (imaxiter[0]);//vecteur qui stock le type de changement de chaque etapes
+  Eigen::VectorXd bic_etape ( static_cast<int>(imaxiter[0]) );//vecteur qui stock le BIC de chaque etapes
+  Eigen::VectorXd complexite_etape ( static_cast<int>(imaxiter[0]) );//vecteur qui stock la compléxité de Z a chaque etapes
+  Eigen::VectorXd etape ( static_cast<int>(imaxiter[0]) );//vecteur qui stock le type de changement de chaque etapes
   bool station;//permet de savoir si on est stationnaire ou non
 
  

@@ -20,4 +20,3 @@ cleanZtest(Z = Z, X = X, pvalmin = 0.05, global = F, bonferroni = F)
 \description{
 This function cleans the structure of correlations by setting to 0 the coefficients in the sub-regressions that are associated to a p-value below the "pvalmin" threshold.
 }
-

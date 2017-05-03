@@ -29,4 +29,3 @@ It allows to compare groups instead of exact sub-regressions. Does nothing by de
 \description{
 Compares two sub-regression structures, considering one of them as the "true one".
 }
-

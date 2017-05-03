@@ -33,4 +33,3 @@ Destructing values to have missing ones
   showdata(datamiss)#plot positions of the missing values (no full individuals, no full variable)
     }
 }
-

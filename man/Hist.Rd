@@ -25,4 +25,11 @@ Hist(x, classes = NULL, plot = TRUE, col = 2:10, mode = c("classical",
 \description{
 fonction qui va faire des histogrammes par classes
 }
-
+\examples{
+   \dontrun{
+require(CorReg)
+x<-c(rnorm(50,0,1),rnorm(50,1,1))
+classes<-rep(1:2,each=50)
+Hist(x,classes)
+}
+}

@@ -1,9 +1,9 @@
-# ' Probability of Z without knowing the dataset. It also gives the exact number of binary nilpotent matrices of size p.
-# ' @param p the number of covariates
-# '@param Z binary adjacency matrix of the structure (size p)
-# ' @param star gives the log proba under uniform law for p2
-# ' @param proba gives the proba under the uniform law for Z. if FALSE and star=FALSE it gives the number of p-sized binary nilpotent matrices
-# ' @export
+#' Probability of Z without knowing the dataset. It also gives the exact number of binary nilpotent matrices of size p.
+#' @param p the number of covariates
+#' @param Z binary adjacency matrix of the structure (size p)
+#' @param star gives the log proba under uniform law for p2
+#' @param proba gives the proba under the uniform law for Z. if FALSE and star=FALSE it gives the number of p-sized binary nilpotent matrices
+#' @export
 # ' 
 # '
 ProbaZ<-function(Z=NULL,p=NULL,proba=FALSE,star=TRUE){

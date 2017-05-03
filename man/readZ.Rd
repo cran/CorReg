@@ -24,7 +24,9 @@ readZ(Z = Z, B = NULL, crit = c("none", "R2", "F", "sigmaX"),
 \item{order}{define the order used (0: none, -1: decreasing, 1: growing) for printing}
 }
 \value{
-a list containing the sub-regressions details
+a list containing the sub-regressions details. Each item of the list represents 
+a subregression. First element is the R-square.Second element is the variable that is regressed by others.
+Then comes the list of the explicative variables in the subgression and the associated coefficients (in the first column).
 }
 \description{
 This function describes the structure of sub-regression given by an adjacency matrix. It computes the associated regression coefficients and R-squared for each sub-regression.
@@ -43,4 +45,3 @@ readZ(Z = res$Z_opt,crit = "R2",output = "all",X = data)
 #other lines : Coefficients of sub-regression and name of the associated covariate
 }
 }
-

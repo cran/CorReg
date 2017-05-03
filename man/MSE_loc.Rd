@@ -33,4 +33,3 @@ MSE_loc(Y=Y_test,X=X_test,A=A)#MSE on the validation sample
 \description{
 This function computes the MSE (Mean Squared Error) of prediction associated to a vector of coefficients \code{A} used to predict a response variable \code{Y} by linear regression on \code{X}, with an intercept or not.
 }
-

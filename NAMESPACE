@@ -2,9 +2,11 @@
 
 export(BicZ)
 export(BoxPlot)
+export(CVMSE)
 export(Conan)
 export(Hist)
 export(MSE_loc)
+export(ProbaZ)
 export(Terminator)
 export(cleanZ)
 export(cleanZtest)

@@ -5,7 +5,7 @@
 \title{Boxplot with confidence interval and ANOVA on the plot.}
 \usage{
 BoxPlot(num, grp = NULL, data = NULL, AnoVa = TRUE, risk = 0.05,
-  lang = c("en,fr"), ...)
+  lang = c("en", "fr"), ...)
 }
 \arguments{
 \item{num}{a numeric vector to plot boxplot(num~grp). Represents the value that will be compared between the groups.}
@@ -38,4 +38,3 @@ BoxPlot(X$num,X$grp,data=X,ylab="num",main="boxplot with confidence intervals")
 
 }
 }
-

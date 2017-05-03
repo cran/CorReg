@@ -56,4 +56,3 @@ density$details #matrices that describe each Gaussian Mixture (proportions, mean
 
    }
 }
-

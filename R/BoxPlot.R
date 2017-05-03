@@ -21,7 +21,7 @@
 #' #Confidence interval in red with mean in blue.
 #' 
 #' }
-BoxPlot<-function(num,grp=NULL,data=NULL,AnoVa=TRUE,risk=0.05,lang=c("en,fr"),...){
+BoxPlot<-function(num,grp=NULL,data=NULL,AnoVa=TRUE,risk=0.05,lang=c("en","fr"),...){
    
    if(!is.null(grp)){
       formula=num~grp

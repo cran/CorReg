@@ -69,11 +69,10 @@ require(CorReg)
   abline(h=MSE_complete,col="red")
    }
 }
-\author{
-Maintainer: Clement THERY <clement.thery@arcelormittal.com>
-}
 \references{
 Model-based covariable decorrelation in linear regression (CorReg): application to missing data and to steel industry. C Thery - 2015. see \url{http://www.theses.fr/2015LIL10060} to read the associated PhD Thesis.
 }
+\author{
+Maintainer: Clement THERY <clement.thery@arcelormittal.com>
+}
 \keyword{package}
-

@@ -1,8 +1,8 @@
 Package: CorReg
 Type: Package
-Title: Linear Regression Based on Linear Structure Between Covariates
-Version: 1.1.9
-Date: 2016-10-24
+Title: Linear Regression Based on Linear Structure Between Variables
+Version: 1.2.1
+Date: 2017-04-27
 Authors@R: c(person("Clement", "THERY", role = c("aut", "cre"),
     email = "corregeous@correg.org"),
     person("Christophe", "BIERNACKI", role = "ctb"),
@@ -14,10 +14,10 @@ Authors@R: c(person("Clement", "THERY", role = c("aut", "cre"),
     person("Jeremie","KELLNER",role="ctb")
     )
 Description: Linear regression based on a recursive structural equation model
-    (explicit multiples correlations) found by a MCMC algorithm. It permits to face
-    highly correlated covariates. Variable selection is included (by lasso,
+    (explicit multiples correlations) found by a M.C.M.C. algorithm. It permits to face
+    highly correlated variables. Variable selection is included (by lasso,
     elastic net, etc.). It also provides some graphical tools for basic
-    statistics (Boxplot with confidence intervals, etc) and regression trees.
+    statistics.
 License: CeCILL
 Copyright: ArcelorMittal
 URL: http://www.correg.org
@@ -28,10 +28,11 @@ Imports: Rcpp(>= 0.11.0), lars(>= 1.2), Rmixmod(>= 2.0.1),
         mclust(>= 4.2), methods, graphics, grDevices, utils, stats
 LinkingTo: Rcpp, RcppEigen
 Suggests: clere(>= 1.1.2), spikeslab(>= 1.1.5), parcor(>= 0.2), missMDA
-        (>= 1.7.3), tuneR
-RoxygenNote: 5.0.1
+        (>= 1.7.3), tuneR, knitr, rmarkdown
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1
 NeedsCompilation: yes
-Packaged: 2016-10-24 16:58:38 UTC; U038226
+Packaged: 2017-05-02 18:41:26 UTC; U038226
 Author: Clement THERY [aut, cre],
   Christophe BIERNACKI [ctb],
   Gaetan LORIDANT [ctb],
@@ -42,4 +43,4 @@ Author: Clement THERY [aut, cre],
   Jeremie KELLNER [ctb]
 Maintainer: Clement THERY <corregeous@correg.org>
 Repository: CRAN
-Date/Publication: 2016-10-24 23:30:20
+Date/Publication: 2017-05-03 06:29:43 UTC

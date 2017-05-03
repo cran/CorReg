@@ -25,4 +25,3 @@ cleanZ(X = X, Z = Z, Bic_null_vect = Bic_null_vect, methode = 1,
 \description{
 clean the structure of correlations Z (if BIC improved)
 }
-

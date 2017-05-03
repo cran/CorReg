@@ -40,4 +40,3 @@ Bic_null_vect=density_estimation(X=X)$BIC_vect
 res=BicZ(X = X,Z = Z,Bic_null_vect=Bic_null_vect)
     }
 }
-

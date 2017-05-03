@@ -48,4 +48,3 @@ main="Regression tree of cars consumption (in mpg)"
   
     }
 }
-

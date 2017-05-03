@@ -7,7 +7,9 @@
 #' @param output indicates the content of the output: c("index","names","all")
 #' @param X is a data frame or matrix containing the dataset
 #' @param order define the order used (0: none, -1: decreasing, 1: growing) for printing
-#' @return a list containing the sub-regressions details
+#' @return a list containing the sub-regressions details. Each item of the list represents 
+#' a subregression. First element is the R-square.Second element is the variable that is regressed by others.
+#' Then comes the list of the explicative variables in the subgression and the associated coefficients (in the first column).
 #' @examples
 #' \dontrun{
 #' 
