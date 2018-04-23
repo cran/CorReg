@@ -2,7 +2,7 @@
 % Please edit documentation in R/Hist.R
 \name{Hist}
 \alias{Hist}
-\title{fonction qui va faire des histogrammes par classes}
+\title{Histograms with clusters}
 \usage{
 Hist(x, classes = NULL, plot = TRUE, col = 2:10, mode = c("classical",
   "cumsum", "density"), breaks = "Sturges", ...)
@@ -23,7 +23,7 @@ Hist(x, classes = NULL, plot = TRUE, col = 2:10, mode = c("classical",
 \item{...}{further arguments and graphical parameters passed to plot.histogram and thence to title and axis.}
 }
 \description{
-fonction qui va faire des histogrammes par classes
+Histograms with clusters
 }
 \examples{
    \dontrun{

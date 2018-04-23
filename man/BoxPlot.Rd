@@ -5,7 +5,7 @@
 \title{Boxplot with confidence interval and ANOVA on the plot.}
 \usage{
 BoxPlot(num, grp = NULL, data = NULL, AnoVa = TRUE, risk = 0.05,
-  lang = c("en", "fr"), ...)
+  lang = c("en", "fr"), verbose = TRUE, ...)
 }
 \arguments{
 \item{num}{a numeric vector to plot boxplot(num~grp). Represents the value that will be compared between the groups.}
@@ -16,9 +16,11 @@ BoxPlot(num, grp = NULL, data = NULL, AnoVa = TRUE, risk = 0.05,
 
 \item{AnoVa}{boolean to compute or not anova (when multiple groups) to see if they differ in mean.If false the Kruskal-Wallis Rank Sum test is computed instead.}
 
-\item{risk}{the risk value used for confidence intervals}
+\item{risk}{the risk value used for confidence intervals.}
 
 \item{lang}{lingustic parameter to specify the language of the legend}
+
+\item{verbose}{boolean to make a test and print the result in the subtitle}
 
 \item{...}{Other graphical parameters}
 }

@@ -6,7 +6,7 @@
 \usage{
 recursive_tree(data = data, Y = "Y", modele = NULL, kill = NULL,
   index = NULL, print = TRUE, plot = TRUE, main = NULL, sub = NULL,
-  lang = c("en", "fr"))
+  lang = c("en", "fr"), all = FALSE, digits = getOption("digits") - 3)
 }
 \arguments{
 \item{data}{the dataset including the response}
@@ -28,6 +28,10 @@ recursive_tree(data = data, Y = "Y", modele = NULL, kill = NULL,
 \item{sub}{the subtitle (if NULL it is automatically added)}
 
 \item{lang}{the language for the automatic subtitle in the plot}
+
+\item{all}{Logical. If TRUE, all nodes are labeled, otherwise just terminal nodes.}
+
+\item{digits}{number of digits for legend of the leaves}
 }
 \value{
 returns the tree as an "rpart" object and the modele as a vector of the names of the covariates the tree could have used (to give as an input of the function).

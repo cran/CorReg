@@ -4,8 +4,9 @@
 #' @param grp a qualitative vector (factor) to plot boxplot(num~grp). Represents the groups we will compare.
 #' @param data a data.frame (or list) from which the variables in formula should be taken.
 #' @param AnoVa boolean to compute or not anova (when multiple groups) to see if they differ in mean.If false the Kruskal-Wallis Rank Sum test is computed instead.
-#' @param risk the risk value used for confidence intervals
+#' @param risk the risk value used for confidence intervals. 
 #' @param lang lingustic parameter to specify the language of the legend
+#' @param verbose boolean to make a test and print the result in the subtitle
 #' @param ... Other graphical parameters 
 #' @export
 #' @examples
@@ -21,7 +22,7 @@
 #' #Confidence interval in red with mean in blue.
 #' 
 #' }
-BoxPlot<-function(num,grp=NULL,data=NULL,AnoVa=TRUE,risk=0.05,lang=c("en","fr"),...){
+BoxPlot<-function(num,grp=NULL,data=NULL,AnoVa=TRUE,risk=0.05,lang=c("en","fr"),verbose=TRUE,...){
    
    if(!is.null(grp)){
       formula=num~grp
@@ -47,7 +48,8 @@ BoxPlot<-function(num,grp=NULL,data=NULL,AnoVa=TRUE,risk=0.05,lang=c("en","fr"),
          }
       }
       test=ifelse(AnoVa,"(AnoVa)","(Kruskal-Wallis)")
-      sub=paste("p-value=",round(pval,4), " ",phrase, test )
+      if(verbose){sub=paste("p-value=",round(pval,4), " ",phrase, test )}
+      else{sub=""}
    }else{#1 seule classe : grp=NULL
       sub=""
       formula=num

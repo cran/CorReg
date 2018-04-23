@@ -72,14 +72,14 @@ Terminator<-function(target=NULL, wrath=0.1,diag=0,Z=NULL){
                            ssreg=ssreg[ssreg!=mankloc]
                            quiblok=unique(c(quiblok,ssreg))
                            quiZ=unique(c(quiblok,quiZ))[-c(1:length(quiblok))]#on enleve les bloques
-                        }else{
-                           break
-                        }
+                        }#else{
+                           # break
+                        #}
                      }
                   }                  
-               }else{
-                  break
-               }
+               }#else{
+                  # break
+               #}
             }
             quidiag=rbind(quidiag,cbind(i,unique(quiblok)))
          }

@@ -1,4 +1,4 @@
-#'fonction qui va faire des histogrammes par classes
+#' Histograms with clusters
 #' @param x a vector, matrix or data.frame on which the histogram will be computed and ploted.
 #' @param plot if FALSE, the histogram is only computed with no graphical output.
 #' @param classes vector of classes to color
@@ -38,7 +38,7 @@ Hist<-function(x,classes=NULL,plot=TRUE,col=2:10,mode=c("classical","cumsum","de
       hvi = hist(vi,breaks=xrange,plot=F)$counts
       #hv3 = hist(v3,breaks=xrange,plot=F)$counts
       hvtots=rbind(hvtots,hvi)
-    }
+    } 
 
 
 

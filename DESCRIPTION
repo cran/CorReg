@@ -1,8 +1,8 @@
 Package: CorReg
 Type: Package
 Title: Linear Regression Based on Linear Structure Between Variables
-Version: 1.2.1
-Date: 2017-04-27
+Version: 1.2.8
+Date: 2018-04-23
 Authors@R: c(person("Clement", "THERY", role = c("aut", "cre"),
     email = "corregeous@correg.org"),
     person("Christophe", "BIERNACKI", role = "ctb"),
@@ -32,7 +32,7 @@ Suggests: clere(>= 1.1.2), spikeslab(>= 1.1.5), parcor(>= 0.2), missMDA
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
 NeedsCompilation: yes
-Packaged: 2017-05-02 18:41:26 UTC; U038226
+Packaged: 2018-04-23 16:57:05 UTC; U038226
 Author: Clement THERY [aut, cre],
   Christophe BIERNACKI [ctb],
   Gaetan LORIDANT [ctb],
@@ -43,4 +43,4 @@ Author: Clement THERY [aut, cre],
   Jeremie KELLNER [ctb]
 Maintainer: Clement THERY <corregeous@correg.org>
 Repository: CRAN
-Date/Publication: 2017-05-03 06:29:43 UTC
+Date/Publication: 2018-04-23 18:09:06 UTC

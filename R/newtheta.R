@@ -56,7 +56,7 @@ newtheta<-function(X=X,Z=Z,B=B,Sigma=Sigma,A=A,lambda=NULL,Atilde=Atilde,nbit=1)
       }else{
          print(it)
          print("numerically singular matrix J")
-        break
+        # break
       }    
    }  
    return(list(B=B,Sigma=Sigma,lambda=lambda))
