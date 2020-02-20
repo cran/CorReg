@@ -2,11 +2,22 @@
 % Please edit documentation in R/recursive_tree.R
 \name{recursive_tree}
 \alias{recursive_tree}
-\title{decision tree in a recursive way}
+\title{Decision tree in a recursive way}
 \usage{
-recursive_tree(data = data, Y = "Y", modele = NULL, kill = NULL,
-  index = NULL, print = TRUE, plot = TRUE, main = NULL, sub = NULL,
-  lang = c("en", "fr"), all = FALSE, digits = getOption("digits") - 3)
+recursive_tree(
+  data = data,
+  Y = "Y",
+  modele = NULL,
+  kill = NULL,
+  index = NULL,
+  verbose = TRUE,
+  plot = TRUE,
+  main = NULL,
+  sub = NULL,
+  lang = c("en", "fr"),
+  all = FALSE,
+  digits = getOption("digits") - 3
+)
 }
 \arguments{
 \item{data}{the dataset including the response}
@@ -19,7 +30,7 @@ recursive_tree(data = data, Y = "Y", modele = NULL, kill = NULL,
 
 \item{index}{to give a number to the plot}
 
-\item{print}{boolean to print the tree parameters}
+\item{verbose}{boolean to print the tree parameters}
 
 \item{plot}{boolean to plot the tree}
 
@@ -35,20 +46,18 @@ recursive_tree(data = data, Y = "Y", modele = NULL, kill = NULL,
 }
 \value{
 returns the tree as an "rpart" object and the modele as a vector of the names of the covariates the tree could have used (to give as an input of the function).
-\item{modele}{ vector of the names of the covariates the tree could have used} 
+\item{modele}{ vector of the names of the covariates the tree could have used}
 \item{tree}{ the regression tree as an "rpart" object}
 }
 \description{
-decision tree in a recursive way
+Decision tree in a recursive way
 }
 \examples{
-   \dontrun{
-   data<-mtcars
-   require(CorReg)
-main="Regression tree of cars consumption (in mpg)"
-  mytree=recursive_tree(data = data,Y ="mpg" ,main=main)
-   #want to try without cylinder and disp
-  mytree2=recursive_tree(data = data,Y ="mpg" ,kill=c("cyl","disp"),modele=mytree$modele,main=main)
-  
-    }
+data <- mtcars
+main = "Regression tree of cars consumption (in mpg)"
+mytree = recursive_tree(data = data, Y = "mpg", main = main, verbose = FALSE)
+# want to try without cylinder and disp
+mytree2 = recursive_tree(data = data, Y = "mpg", kill = c("cyl", "disp"),
+modele = mytree$modele, main = main, verbose = FALSE)
+
 }

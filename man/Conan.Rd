@@ -4,8 +4,14 @@
 \alias{Conan}
 \title{Removes missing values (rows and column to obtain a large full matrix)}
 \usage{
-Conan(X = X, nbstep = Inf, std = FALSE, verbose = FALSE,
-  coercing = NULL, Xout = TRUE)
+Conan(
+  X = X,
+  nbstep = Inf,
+  std = FALSE,
+  verbose = FALSE,
+  coercing = NULL,
+  Xout = TRUE
+)
 }
 \arguments{
 \item{X}{the dataset (matrix) with missing values}
@@ -23,19 +29,17 @@ Conan(X = X, nbstep = Inf, std = FALSE, verbose = FALSE,
 \value{
 \item{individus_restants}{Index of remaining individuals}
 \item{variables_restantes}{Index of remaining variables}
-\item{X}{If Xout=TRUE, the reduced dataset without missing values}
+\item{X}{If \code{Xout=TRUE}, the reduced dataset without missing values}
 }
 \description{
 Removes missing values (rows and column alternatively) to obtain a large full matrix
 }
 \examples{
-   \dontrun{
-   data<-mtcars
-   require(CorReg)
-  datamiss=Terminator(target = data,wrath=0.05)#5\% of missing values
-  datamiss
-  showdata(datamiss)#plot positions of the missing values
-  reduced=Conan(X=datamiss)
-  reduced
-    }
+data <- mtcars
+datamiss = Terminator(target = data, wrath = 0.05) # 5\% of missing values
+datamiss
+showdata(datamiss) # plot positions of the missing values
+reduced = Conan(X = datamiss)
+reduced
+  
 }

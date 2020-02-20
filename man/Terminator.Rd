@@ -11,7 +11,7 @@ Terminator(target = NULL, wrath = 0.1, diag = 0, Z = NULL)
 
 \item{wrath}{the ratio of missing values in the output}
 
-\item{diag}{if =1 it creates a diagonal band of missing values (no complete line, no complete column, but not too much missing values)}
+\item{diag}{if == 1 it creates a diagonal band of missing values (no complete line, no complete column, but not too much missing values)}
 
 \item{Z}{adjacency matrix to coerce a maximum of 1 missing value per sub-regression for each individual}
 }
@@ -22,14 +22,14 @@ the matrix with missing values.
 Destructing values to have missing ones
 }
 \examples{
-   \dontrun{
-  rm(list=ls())#clean the workspace
-  
-   data<-mtcars
-   require(CorReg)
-  datamiss=Terminator(target = data,wrath=0.05)#5\% of missing values
-  showdata(datamiss)#plot positions of the missing values
-  datamiss=Terminator(target = data,diag=1)#diag of missing values
-  showdata(datamiss)#plot positions of the missing values (no full individuals, no full variable)
-    }
+data <- mtcars
+
+# add 5\% of missing values
+datamiss <- Terminator(target = data, wrath = 0.05)
+showdata(datamiss) # plot positions of the missing values
+
+# create a diagonal of missing values
+datamiss <- Terminator(target = data, diag = 1)
+showdata(datamiss) # plot positions of the missing values (no full individuals, no full variable)
+   
 }

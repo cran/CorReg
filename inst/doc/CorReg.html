@@ -1,189 +1,327 @@
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="pandoc" />
+<title>CorReg&#39;s Concept</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
 
-<meta name="author" content="Clément Théry" />
-
-
-<title>How to take advantage of CorReg ?</title>
-
-
-
-<style type="text/css">code{white-space: pre;}</style>
+<!-- Styles for R syntax highlighter -->
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
 </style>
 
 
 
-<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
-
 </head>
 
 <body>
+<h1>CorReg&#39;s Concept</h1>
 
+<p>This package was motivated by correlation issues in real datasets, in particular industrial datasets. </p>
 
+<p>The main idea stands in explicit modeling of the correlations between covariates by a structure of sub-regressions (so it can model complex links, not only correlations between two variables), that simply is a system of linear regressions between the covariates. It points out redundant covariates that can be deleted in a pre-selection step to improve matrix conditioning without significant loss of information and with strong explicative potential because this pre-selection is explained by the structure of sub-regressions, itself easy to interpret. An algorithm to find the sub-regressions structure inherent to the dataset is provided, based on a full generative model and using Monte-Carlo Markov Chain (MCMC) method. This pre-treatment does not depend on a response variable and thus can be used in a more general way with any correlated datasets. </p>
 
+<p>In a second part, a plug-in estimator is defined to get back the redundant covariates sequentially. Then all the covariates are used but the sequential approach acts as a protection against correlations. </p>
 
-<h1 class="title toc-ignore">How to take advantage of CorReg ?</h1>
-<h4 class="author"><em>Clément Théry</em></h4>
-<h4 class="date"><em>26 avril 2017</em></h4>
-
-
-
-<div id="corregs-concept" class="section level1">
-<h1>CorReg’s Concept</h1>
-<p>This package was motivated by correlation issues in real datasets, in particular industrial datasets.</p>
-<p>The main idea stands in explicit modeling of the correlations between covariates by a structure of sub-regressions (so it can model complex links, not only correlations between two variables), that simply is a system of linear regressions between the covariates. It points out redundant covariates that can be deleted in a pre-selection step to improve matrix conditioning without significant loss of information and with strong explicative potential because this pre-selection is explained by the structure of sub-regressions, itself easy to interpret. An algorithm to find the sub-regressions structure inherent to the dataset is provided, based on a full generative model and using Monte-Carlo Markov Chain (MCMC) method. This pre-treatment does not depend on a response variable and thus can be used in a more general way with any correlated datasets.</p>
-<p>In a second part, a plug-in estimator is defined to get back the redundant covariates sequentially. Then all the covariates are used but the sequential approach acts as a protection against correlations.</p>
 <p>This package also contains some functions to make statistics easier (see <code>BoxPlot</code> and <code>recursive_tree</code> or <code>matplot_zone</code>).</p>
-<p>In this vignette we explain the main method in CorReg that leads to the <code>correg</code> function. This function allows to make linear regression using sub-regressions structure and/or many variable selection methods (including lasso, ridge, clere, stepwise,…)</p>
-<div id="dataset-generation" class="section level3">
-<h3>Dataset generation</h3>
-<p>We first generate (for this tutorial) a dataset with strong correlations between the covariates. The <code>mixture_generator</code> function gives such a dataset and also a validation sample built with the same parameters. Both contains a response variable generated on some covariates (not all) by linear regression. So we have sub-regressions that make some variables redundent when we know the other variables. Such correlations make the variance of the regression estimators explode. Moreover, dimension is unnecessarily high and interpretation of regression coefficients is dangerous.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">require</span>(CorReg)</code></pre></div>
-<pre><code>## Loading required package: CorReg</code></pre>
-<pre><code>## 
-##                                                                                                                     
-##                                                                                                                     
-##           CCCCCCCCCCCCC                                         RRRRRRRRRRRRRRRRR                                         
-##         CCC::::::::::::C                                        R::::::::::::::::R                                          
-##        CC:::::::::::::::C                                       R::::::RRRRRR:::::R                                         
-##       C:::::CCCCCCCC::::C                                       RR:::::R     R:::::R                                        
-##       C:::::C       CCCCCC   ooooooooooo      rrrrr   rrrrrrrrr   R::::R     R:::::R     eeeeeeeeeeee       ggggggggg   ggggg
-##       C:::::C               oo:::::::::::oo   r::::rrr:::::::::r  R::::R     R:::::R   ee::::::::::::ee    g:::::::::ggg::::g
-##       C:::::C              o:::::::::::::::o  r:::::::::::::::::r R::::RRRRRR:::::R   e::::::eeeee:::::ee g:::::::::::::::::g
-##       C:::::C              o:::::ooooo:::::or r::::::rrrrr::::::r R:::::::::::::RR   e::::::e     e:::::eg::::::ggggg::::::gg
-##       C:::::C              o::::o     o::::o  r:::::r     r:::::r R::::RRRRRR:::::R  e:::::::eeeee::::::eg:::::g     g:::::g 
-##       C:::::C              o::::o     o::::o  r:::::r     rrrrrrr R::::R     R:::::R e:::::::::::::::::e g:::::g     g:::::g 
-##       C:::::C              o::::o     o::::o  r:::::r             R::::R     R:::::R e::::::eeeeeeeeeee  g:::::g     g:::::g 
-##       C:::::C       CCCCCC o::::o     o::::o  r:::::r             R::::R     R:::::R e:::::::e           g::::::g    g:::::g 
-##       C:::::CCCCCCCC::::C  o:::::ooooo:::::o  r:::::r           RR:::::R     R:::::R e::::::::e          g:::::::ggggg:::::g 
-##        CC:::::::::::::::C  o:::::::::::::::o  r:::::r           R::::::R     R:::::R  e::::::::eeeeeeee   g::::::::::::::::g 
-##         CCC::::::::::::C   oo:::::::::::oo    r:::::r           R::::::R     R:::::R   ee:::::::::::::e    gg::::::::::::::g 
-##           CCCCCCCCCCCCC      ooooooooooo      rrrrrrr           RRRRRRRR     RRRRRRR     eeeeeeeeeeeeee      gggggggg::::::g 
-##                                                                                                                      g:::::g 
-##                                                                                                          gggggg      g:::::g 
-##                                                                                                          g:::::gg   gg:::::g 
-##                                                                                                          g::::::ggg:::::::g 
-##                                                                                                           gg:::::::::::::g  
-##                                                                                                              ggg::::::ggg    
-##                                                                                                                 gggggg       
-##           
-##  The Concept, the Method, the Power</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="co">#dataset generation</span>
-    base=<span class="kw">mixture_generator</span>(<span class="dt">n=</span><span class="dv">15</span>,<span class="dt">p=</span><span class="dv">10</span>,<span class="dt">ratio=</span><span class="fl">0.4</span>,<span class="dt">tp1=</span><span class="dv">1</span>,<span class="dt">tp2=</span><span class="dv">1</span>,<span class="dt">tp3=</span><span class="dv">1</span>,<span class="dt">positive=</span><span class="fl">0.5</span>,
-                           <span class="dt">R2Y=</span><span class="fl">0.8</span>,<span class="dt">R2=</span><span class="fl">0.9</span>,<span class="dt">scale=</span><span class="ot">TRUE</span>,<span class="dt">max_compl=</span><span class="dv">3</span>,<span class="dt">lambda=</span><span class="dv">1</span>)
 
-    X_appr=base<span class="op">$</span>X_appr <span class="co">#learning sample</span>
-    Y_appr=base<span class="op">$</span>Y_appr <span class="co">#response variable for the learning sample</span>
-    Y_test=base<span class="op">$</span>Y_test <span class="co">#responsee variable for the validation sample</span>
-    X_test=base<span class="op">$</span>X_test <span class="co">#validation sample</span>
-    TrueZ=base<span class="op">$</span>Z<span class="co">#True generative structure (binary adjacency matrix)</span></code></pre></div>
-<p>We also get an adjacency matrix Z that describes the Directed Acyclic Graph of the links between the covariates. See <a href="https://en.wikipedia.org/wiki/Adjacency_matrix" class="uri">https://en.wikipedia.org/wiki/Adjacency_matrix</a> for more informations on adjacency matrices.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">TrueZ</code></pre></div>
+<p>In this vignette we explain the main method in CorReg that leads to the <code>correg</code> function. This function allows to make linear regression using sub-regressions structure and/or many variable selection methods (including lasso, ridge, clere, stepwise,&hellip;)</p>
+
+<h3>Dataset generation</h3>
+
+<p>We first generate (for this tutorial) a dataset with strong correlations between the covariates.
+The <code>mixture_generator</code> function gives such a dataset and also a validation sample built with the same parameters. Both contains a response variable generated on some covariates (not all) by linear regression.
+So we have sub-regressions that make some variables redundent when we know the other variables. Such correlations make the variance of the regression estimators explode. Moreover, dimension is unnecessarily high and interpretation of regression coefficients is dangerous. </p>
+
+<pre><code class="r">library(CorReg)
+</code></pre>
+
+<pre><code>## CorReg: The Concept, the Method, the Power
+</code></pre>
+
+<pre><code class="r"># dataset generation
+base &lt;- mixture_generator(n = 15, p = 10, ratio = 0.4, tp1 = 1, tp2 = 1, tp3 = 1, positive = 0.5,
+                          R2Y = 0.8, R2 = 0.9, scale = TRUE, max_compl = 3, lambda = 1)
+
+X_appr &lt;- base$X_appr # learning sample
+Y_appr &lt;- base$Y_appr # response variable for the learning sample
+Y_test &lt;- base$Y_test # response variable for the validation sample
+X_test &lt;- base$X_test # validation sample
+TrueZ &lt;- base$Z # True generative structure (binary adjacency matrix)
+</code></pre>
+
+<p>We also get an adjacency matrix Z that describes the Directed Acyclic Graph of the links between the covariates.
+See <a href="https://en.wikipedia.org/wiki/Adjacency_matrix">https://en.wikipedia.org/wiki/Adjacency_matrix</a> for more informations on adjacency matrices.</p>
+
+<pre><code class="r">TrueZ
+</code></pre>
+
 <pre><code>##       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
-##  [1,]    0    0    0    1    0    0    0    0    1     0
-##  [2,]    0    0    1    0    0    0    0    1    0     0
-##  [3,]    0    0    0    0    0    0    0    0    0     0
+##  [1,]    0    0    0    1    0    0    0    0    0     1
+##  [2,]    0    0    0    0    0    0    0    0    0     0
+##  [3,]    0    0    0    0    0    0    1    0    0     0
 ##  [4,]    0    0    0    0    0    0    0    0    0     0
-##  [5,]    0    0    1    1    0    0    0    1    0     0
-##  [6,]    0    0    0    0    0    0    0    0    0     0
-##  [7,]    0    0    1    1    0    0    0    1    1     0
-##  [8,]    0    0    0    0    0    0    0    0    0     0
-##  [9,]    0    0    0    0    0    0    0    0    0     0
-## [10,]    0    0    0    0    0    0    0    0    1     0</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="co">#TrueZ[i,j]==1 means that X[,j] linearly depends on X[,i]</span></code></pre></div>
-<p>We will try to find this structure (in real life we don’t know the true structure).</p>
-</div>
-</div>
-<div id="corregs-method" class="section level1">
-<h1>CorReg’s Method</h1>
-<div id="density-estimation" class="section level3">
+##  [5,]    0    1    0    1    0    0    1    0    0     0
+##  [6,]    0    0    0    1    0    0    1    0    0     1
+##  [7,]    0    0    0    0    0    0    0    0    0     0
+##  [8,]    0    1    0    0    0    0    0    0    0     0
+##  [9,]    0    1    0    0    0    0    0    0    0     1
+## [10,]    0    0    0    0    0    0    0    0    0     0
+</code></pre>
+
+<pre><code class="r"># TrueZ[i,j]==1 means that X[,j] linearly depends on X[,i]
+</code></pre>
+
+<p>We will try to find this structure (in real life we don&#39;t know the true structure).</p>
+
+<h1>CorReg&#39;s Method</h1>
+
 <h3>Density estimation</h3>
-<p>To find the correlation structure we need a global density model that will serve as a null hypothesis. Each variable can be independent (following a certain density we have to estimate) or can be lineary dependent on other covariates. The <code>density_estimation</code> function will provide this null hypothesis for each variable. We use Gaussian Mixture to fit a large scope of density in real life.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="co">#density estimation for the MCMC (with Gaussian Mixtures)</span>
-    density=<span class="kw">density_estimation</span>(<span class="dt">X=</span>X_appr,<span class="dt">nbclustmax=</span><span class="dv">10</span>,<span class="dt">detailed=</span><span class="ot">TRUE</span>,<span class="dt">package =</span> <span class="st">&quot;Rmixmod&quot;</span>)
-    Bic_null_vect=density<span class="op">$</span>BIC_vect<span class="co"># vector of the BIC found (1 value per covariate)</span></code></pre></div>
+
+<p>To find the correlation structure we need a global density model that will serve as a null hypothesis. Each variable can be independent (following a certain density we have to estimate) or can be lineary dependent on other covariates.
+The <code>density_estimation</code> function will provide this null hypothesis for each variable. We use Gaussian Mixture to fit a large scope of density in real life.</p>
+
+<pre><code class="r"># density estimation for the MCMC (with Gaussian Mixtures)
+density &lt;- density_estimation(X = X_appr, nbclustmax = 10, detailed = TRUE, package = &quot;Rmixmod&quot;)
+Bic_null_vect &lt;- density$BIC_vect # vector of the BIC found (1 value per covariate)
+</code></pre>
+
 <p>Each null hypothesis is associated to a BIC criterion. Complexity is the one of each mixture model.</p>
-</div>
-<div id="mcmc-algorithm" class="section level3">
+
 <h3>MCMC Algorithm</h3>
-<p>We use a specific MCMC algorithm (<a href="http://www.theses.fr/2015LIL10060" class="uri">http://www.theses.fr/2015LIL10060</a> and <a href="http://www.theses.fr/2015LIL10060/document/" class="uri">http://www.theses.fr/2015LIL10060/document/</a> or <a href="https://hal.archives-ouvertes.fr/hal-01099133/" class="uri">https://hal.archives-ouvertes.fr/hal-01099133/</a>) to find the Adjacency matrix that describes the correlation structure. We use the Bayesian Information Criterion (BIC) to compare null hypothesis and complex correlations structures with many sub-regressions between covariates.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="co">#MCMC to find the structure</span>
-    res=<span class="kw">structureFinder</span>(<span class="dt">X=</span>X_appr,<span class="dt">verbose=</span><span class="dv">0</span>,<span class="dt">reject=</span><span class="dv">0</span>,<span class="dt">Maxiter=</span><span class="dv">1500</span>,
-                <span class="dt">nbini=</span><span class="dv">30</span>,<span class="dt">candidates=</span><span class="op">-</span><span class="dv">1</span>,<span class="dt">Bic_null_vect=</span>Bic_null_vect,<span class="dt">star=</span><span class="ot">TRUE</span>,<span class="dt">p1max=</span><span class="dv">15</span>,<span class="dt">clean=</span><span class="ot">TRUE</span>)
-    hatZ=res<span class="op">$</span>Z_opt <span class="co">#found structure (adjacency matrix)</span>
-    hatBic=res<span class="op">$</span>bic_opt <span class="co">#associated BIC</span></code></pre></div>
-</div>
-</div>
-<div id="corregs-power" class="section level1">
-<h1>CorReg’s Power</h1>
+
+<p>We use a specific MCMC algorithm (<a href="http://www.theses.fr/2015LIL10060">http://www.theses.fr/2015LIL10060</a> and <a href="http://www.theses.fr/2015LIL10060/document/">http://www.theses.fr/2015LIL10060/document/</a> or <a href="https://hal.archives-ouvertes.fr/hal-01099133/">https://hal.archives-ouvertes.fr/hal-01099133/</a>) to find the Adjacency matrix that describes the correlation structure. We use the Bayesian Information Criterion (BIC) to compare null hypothesis and complex correlations structures with many sub-regressions between covariates.</p>
+
+<pre><code class="r"># MCMC to find the structure
+res &lt;- structureFinder(X = X_appr, verbose = 0, reject = 0, Maxiter = 1500, nbini = 30, 
+                       candidates = -1, Bic_null_vect = Bic_null_vect, star = TRUE, p1max = 15, clean = TRUE)
+hatZ &lt;- res$Z_opt # found structure (adjacency matrix)
+hatBic &lt;- res$bic_opt # associated BIC
+</code></pre>
+
+<h1>CorReg&#39;s Power</h1>
+
 <p>As we work with a dataset we have generated, we know the true structure so we can compare the result with the true model. In terms of BIC:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="co">#BIC comparison between true and found structure</span>
-    bicopt_vect=<span class="kw">BicZ</span>(<span class="dt">X=</span>X_appr,<span class="dt">Z=</span>hatZ,<span class="dt">Bic_null_vect=</span>Bic_null_vect)
-    bicopt_True=<span class="kw">BicZ</span>(<span class="dt">X=</span>X_appr,<span class="dt">Z=</span>TrueZ,<span class="dt">Bic_null_vect=</span>Bic_null_vect)
-    <span class="kw">sum</span>(bicopt_vect)</code></pre></div>
-<pre><code>## [1] 235.5023</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="kw">sum</span>(bicopt_True)</code></pre></div>
-<pre><code>## [1] 241.3905</code></pre>
-<p>And in terms of structure :</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="co">#Structure comparison</span>
-    compZ=<span class="kw">compare_struct</span>(<span class="dt">trueZ=</span>TrueZ,<span class="dt">Zalgo=</span>hatZ)<span class="co">#qualitative comparison</span>
-    compZ</code></pre></div>
+
+<pre><code class="r"># BIC comparison between true and found structure
+bicopt_vect &lt;- BicZ(X = X_appr, Z = hatZ, Bic_null_vect = Bic_null_vect)
+bicopt_True &lt;- BicZ(X = X_appr, Z = TrueZ, Bic_null_vect = Bic_null_vect)
+sum(bicopt_vect)
+</code></pre>
+
+<pre><code>## [1] 256.812
+</code></pre>
+
+<pre><code class="r">sum(bicopt_True)
+</code></pre>
+
+<pre><code>## [1] 261.6426
+</code></pre>
+
+<p>And in terms of structure:</p>
+
+<pre><code class="r"># Structure comparison
+compZ &lt;- compare_struct(trueZ = TrueZ, Zalgo = hatZ) # qualitative comparison
+compZ
+</code></pre>
+
 <pre><code>## $ratio_true1
 ## [1] 1
 ## 
 ## $ratio_true0
-## [1] 0.9431818
+## [1] 0.9659091
 ## 
 ## $true1
 ## [1] 12
 ## 
 ## $false1
-## [1] 5
+## [1] 3
 ## 
 ## $false0
 ## [1] 0
@@ -195,128 +333,139 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## [1] 4
 ## 
 ## $false_left
-## [1] 0</code></pre>
-<p>Then we have a look on the sub-regressions themselves. Each item of the list represents a subregression.</p>
+## [1] 0
+</code></pre>
+
+<p>Then we have a look on the sub-regressions themselves. Each item of the list represents a subregression. </p>
+
 <p>First element is the R-square.Second element is the variable that is regressed by others (if no names provided it gives the position of the variable in the dataset).</p>
+
 <p>Then comes the list of the explicative variables in the subgression and the associated coefficients (in the first column). The <code>readZ</code> function allows to list them by relevance.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="co">#interpretation of found and true structure ordered by increasing R2</span>
-    <span class="kw">readZ</span>(<span class="dt">Z=</span>hatZ,<span class="dt">crit=</span><span class="st">&quot;R2&quot;</span>,<span class="dt">X=</span>X_appr,<span class="dt">output=</span><span class="st">&quot;all&quot;</span>,<span class="dt">order=</span><span class="dv">1</span>)<span class="co"># &lt;NA&gt;line : name of subregressed covariate</span></code></pre></div>
+
+<pre><code class="r"># interpretation of found and true structure ordered by increasing R2
+readZ(Z = hatZ, crit = &quot;R2&quot;, X = X_appr, output = &quot;all&quot;, order = 1) # &lt;NA&gt;line : name of subregressed covariate
+</code></pre>
+
 <pre><code>## [[1]]
 ##                coefs       var
-## 1  0.865778645617283        R2
-## 2               &lt;NA&gt;         3
-## 3  0.822129701097824 intercept
-## 4 0.0553653489562641         1
-## 5  0.142917322165884         2
-## 6  0.188042047634943         5
-## 7  0.117728663058953         6
-## 8 -0.565850648726633         7
-## 9 0.0736539731166202        10
+## 1  0.867190773573823        R2
+## 2               &lt;NA&gt;         4
+## 3 -0.974553609320596 intercept
+## 4   -0.2568577425405         1
+## 5  0.276047594214784         5
+## 6 -0.399524377091434         6
 ## 
 ## [[2]]
 ##                 coefs       var
-## 1   0.880218374697899        R2
-## 2                &lt;NA&gt;         9
-## 3  -0.999605512748156 intercept
-## 4  -0.186417154135249         1
-## 5 -0.0873366802905377         5
-## 6   0.234770670800747         7
-## 7  -0.146010523307879        10
+## 1   0.897509670587174        R2
+## 2                &lt;NA&gt;         7
+## 3   0.995824334322725 intercept
+## 4 -0.0466295813090934         1
+## 5   0.231668265941956         3
+## 6   0.242488130460858         5
+## 7   -0.19066985685861         6
 ## 
 ## [[3]]
 ##                coefs       var
-## 1  0.917313513525003        R2
-## 2               &lt;NA&gt;         8
-## 3  0.907085019842587 intercept
-## 4  0.198961227383444         2
-## 5 -0.228962509917204         5
-## 6 0.0575545099970368         6
-## 7  0.320985084505758         7
+## 1  0.937336225060698        R2
+## 2               &lt;NA&gt;         2
+## 3  0.665143936146535 intercept
+## 4  0.192691059422602         5
+## 5 -0.169995481397167         6
+## 6 -0.416427296791616         8
+## 7  0.577191501913853         9
 ## 
 ## [[4]]
 ##                coefs       var
-## 1  0.928847200032581        R2
-## 2               &lt;NA&gt;         4
-## 3 -0.902974679794493 intercept
-## 4 -0.367396629566935         1
-## 5 -0.183696501657526         5
-## 6 -0.188771496232694         7</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="kw">readZ</span>(<span class="dt">Z=</span>TrueZ,<span class="dt">crit=</span><span class="st">&quot;R2&quot;</span>,<span class="dt">X=</span>X_appr,<span class="dt">output=</span><span class="st">&quot;all&quot;</span>,<span class="dt">order=</span><span class="dv">1</span>)<span class="co"># &lt;NA&gt;line : name of subregressed covariate</span></code></pre></div>
+## 1  0.945463918157156        R2
+## 2               &lt;NA&gt;        10
+## 3 -0.913605756150591 intercept
+## 4 -0.300785963272256         1
+## 5 0.0508096708586622         5
+## 6  0.230165088680022         6
+## 7  0.119734462137462         9
+</code></pre>
+
+<pre><code class="r">readZ(Z = TrueZ, crit = &quot;R2&quot;, X = X_appr, output = &quot;all&quot;, order = 1) # &lt;NA&gt;line : name of subregressed covariate
+</code></pre>
+
 <pre><code>## [[1]]
 ##                coefs       var
-## 1  0.803329928029093        R2
-## 2               &lt;NA&gt;         9
-## 3  -1.01422739848629 intercept
-## 4 -0.190843613606193         1
-## 5  0.177620635388937         7
-## 6 -0.147636178583581        10
+## 1  0.867190773573823        R2
+## 2               &lt;NA&gt;         4
+## 3 -0.974553609320596 intercept
+## 4   -0.2568577425405         1
+## 5  0.276047594214784         5
+## 6 -0.399524377091434         6
 ## 
 ## [[2]]
 ##                coefs       var
-## 1  0.829655678574146        R2
-## 2               &lt;NA&gt;         3
-## 3  0.808465107056329 intercept
-## 4 0.0828536588428535         2
-## 5  0.144603974483763         5
-## 6 -0.554811976563074         7
+## 1  0.888734654207521        R2
+## 2               &lt;NA&gt;         7
+## 3  0.997500431582211 intercept
+## 4  0.223783106366717         3
+## 5  0.229954452615531         5
+## 6 -0.185626411368181         6
 ## 
 ## [[3]]
 ##                coefs       var
-## 1  0.904460325243156        R2
-## 2               &lt;NA&gt;         8
-## 3  0.905732104566846 intercept
-## 4  0.163099420253017         2
-## 5 -0.256387735748006         5
-## 6  0.331060830093764         7
+## 1  0.906274789087218        R2
+## 2               &lt;NA&gt;         2
+## 3  0.677806414005824 intercept
+## 4   0.20378640975884         5
+## 5 -0.434072919309029         8
+## 6  0.460620111755807         9
 ## 
 ## [[4]]
 ##                coefs       var
-## 1  0.928847200032581        R2
-## 2               &lt;NA&gt;         4
-## 3 -0.902974679794493 intercept
-## 4 -0.367396629566935         1
-## 5 -0.183696501657526         5
-## 6 -0.188771496232694         7</code></pre>
-<p>We can finally use the correg function to make linear regression using the sub-regression structure learnt above. We get three models :</p>
+## 1  0.936341275812521        R2
+## 2               &lt;NA&gt;        10
+## 3 -0.909674675330568 intercept
+## 4 -0.289066355832057         1
+## 5  0.223768089727124         6
+## 6    0.1329988492862         9
+</code></pre>
+
+<p>We can finally use the correg function to make linear regression using the sub-regression structure learnt above. We get three models : </p>
+
 <ul>
-<li>Complete model : without the sub-regression structure</li>
+<li>Complete model : without the sub-regression structure </li>
 <li>Explicative model : with the redundant covariates pointed by the sub-regressions</li>
 <li>Predictive model : like the complete model but estimated sequentially to avoid correlation issues, by using the sub-regression structure.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="co">#Regression coefficients estimation</span>
-     select=<span class="st">&quot;NULL&quot;</span><span class="co">#without variable selection (otherwise, choose &quot;lar&quot; for example to use lasso selection)</span>
-    resY=<span class="kw">correg</span>(<span class="dt">X=</span>X_appr,<span class="dt">Y=</span>Y_appr,<span class="dt">Z=</span>hatZ,<span class="dt">compl=</span><span class="ot">TRUE</span>,<span class="dt">expl=</span><span class="ot">TRUE</span>,<span class="dt">pred=</span><span class="ot">TRUE</span>,
-                <span class="dt">select=</span>select,<span class="dt">K=</span><span class="dv">10</span>)</code></pre></div>
-<div id="final-predictive-results-comparison" class="section level3">
+
+<pre><code class="r"># Regression coefficients estimation
+select = &quot;NULL&quot; # without variable selection (otherwise, choose &quot;lar&quot; for example to use lasso selection)
+resY &lt;- correg(X = X_appr, Y = Y_appr, Z = hatZ, compl = TRUE, expl = TRUE, pred = TRUE,
+               select = select, K = 10)
+</code></pre>
+
 <h3>Final Predictive results comparison</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="co">#MSE computation</span>
-    MSE_complete=<span class="kw">MSE_loc</span>(<span class="dt">Y=</span>Y_test,<span class="dt">X=</span>X_test,<span class="dt">A=</span>resY<span class="op">$</span>compl<span class="op">$</span>A)<span class="co">#classical model on X</span>
-    MSE_marginal=<span class="kw">MSE_loc</span>(<span class="dt">Y=</span>Y_test,<span class="dt">X=</span>X_test,<span class="dt">A=</span>resY<span class="op">$</span>expl<span class="op">$</span>A)<span class="co">#reduced model without correlations</span>
-    MSE_plugin=<span class="kw">MSE_loc</span>(<span class="dt">Y=</span>Y_test,<span class="dt">X=</span>X_test,<span class="dt">A=</span>resY<span class="op">$</span>pred<span class="op">$</span>A)<span class="co">#plug-in model</span>
-    MSE_true=<span class="kw">MSE_loc</span>(<span class="dt">Y=</span>Y_test,<span class="dt">X=</span>X_test,<span class="dt">A=</span>base<span class="op">$</span>A)<span class="co"># True model</span></code></pre></div>
+
+<pre><code class="r"># MSE computation
+MSE_complete &lt;- MSE_loc(Y = Y_test, X = X_test, A = resY$compl$A) # classical model on X
+MSE_marginal &lt;- MSE_loc(Y=Y_test, X = X_test, A = resY$expl$A) # reduced model without correlations
+MSE_plugin &lt;- MSE_loc(Y = Y_test, X = X_test, A = resY$pred$A) # plug-in model
+MSE_true &lt;- MSE_loc(Y = Y_test, X = X_test, A = base$A) # True model
+</code></pre>
+
 <p>Then we can compare the MSE obtained for each model.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  <span class="co">#MSE comparison</span>
-    MSE=<span class="kw">data.frame</span>(MSE_complete,MSE_marginal,MSE_plugin,MSE_true)
-    MSE<span class="co">#estimated structure</span></code></pre></div>
+
+<pre><code class="r"># MSE comparison
+MSE &lt;- data.frame(MSE_complete, MSE_marginal, MSE_plugin, MSE_true)
+MSE # estimated structure
+</code></pre>
+
 <pre><code>##   MSE_complete MSE_marginal MSE_plugin MSE_true
-## 1     619.5301     477.3271   645.0799 156.3802</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">barplot</span>(<span class="kw">as.matrix</span>(MSE),<span class="dt">main=</span><span class="st">&quot;MSE on validation dataset&quot;</span>, <span class="dt">sub=</span><span class="kw">paste</span>(<span class="st">&quot;select=&quot;</span>,select),<span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)
-   <span class="kw">abline</span>(<span class="dt">h=</span>MSE_complete,<span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</code></pre></div>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAMAAAAjXV6yAAAAhFBMVEUAAAAAADoAAGYAAP8AOjoAOpAAZmYAZpAAZrY6AAA6ADo6AGY6OgA6kNtmAABmADpmAGZmZgBmZmZmkJBmtrZmtv+QOgCQOjqQZgCQkGaQtpCQ29uQ2/+2ZgC2Zma2/7a2/9u2///bkDrb/7bb/9vb////AAD/tmb/25D//7b//9v///9GHhDbAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAJuUlEQVR4nO2daZubNhSF8TRucRI7TROcpaaJSad4+f//r9LVgsDAAUaTceCcDzNYlg7XL9oeG4nkSvUqeekA7l0EBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBDQKUJEkycNRHZx36ihzScn60R8m1espuuxVYfnjUnJzxkD/HK+1HL1qLT5ELttoQKuDOigTA0gFapRdfxag8+7hKYCkOFaVbSygV5utPli9FSieibaLBqiW0vyEt1WiVxOLV9nGAvp9l+ryD+8FUC4VStcjoXV77tNG8dqasqtDbiugCUEOVYatzWatqhok2U2oPkMul+O7zdFt31v8WCXUOgl5O71W2SYA+mOvyp13688WkLiYT9kCqKhqlKtf7iOUrl2qhNK/FQDyzVe5VhlqgHrse4sfqwRXUIcuPascPgHQNleup8228E3Mh1Q1scymKHAq+CIx+PQZC3vBJZq0qjGppRwAKuVi5rpYkMFcE5Ojzx4VdwkmjDLx76mE7VOa2LZUH79IsqLWSVcDWg2QPU1uY88kqNSbmaq+rfCmIaDcXVUbqskQAuq17yseJKgSLsGgMXE9AdBpk15VLSoshrKtk7aAXF8izUj+2AsmUqFlqrgu6TiHgMxVroDYDAGgXvve4vUTJrYfk37JN8XJgFT/86/qh4qqnpT23Dd9kAtXupsbQPIRctvOVA55q/rkLmdu2ojLEADqtUfFfYLteORixQCUXfarr5v1o0TlG4it5Q1A/TVI5/+2sw1ja9+q1SA7lD0cgwwjalB38TDh6scxqdJWTwCkyv6ljAWQpq89TUu/HcXqnUQT0Hm3+iIZysRjau+DggzdfVDDvq94mHD5dLC5w9ieAqhw9TGcKJom5uTM68NME5CfdUg2Xe3TjlEsyGB82kaxhn1f8SDBeDjg5qKLqRucxwNSlmbqktUnGy2AXFJ6bQVU2jmCd6kBMpORJHGdiDXSPUVjHtRu31+8eVltaXdYJhPnQaqwaU+uwZZ+EGgDZEaGzJetAzIXyxLSA6N8ltpMOsl8r2oymAny3+FMusu+u/ghTBAPE7GQNCH5WTm/7gAiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgL6RQAlWM915mfyjazkNyQCIqA+ERDQbAD998vohQBZ0+jXezY1yJoSUNOlPhshIGBHQMCOgIAdAQG75QJy62Y6154vHFDhVuCWfnFxq91SAV32HkvRsbnCsgGdd35NZ9nRyJYNiDUIqXDLgtkHdcgtMu/c3mXpgAbaERCwWy4gThT7xYlivzjMA3VPFPmFmYg1CIkTRSROFOPYDf44g+9JWCyg6Bmja9wopnueamudTrtFA5LxKxjw2+yWDMiiiTTMzxDQaWM2norzjeIMAbEG9cjMgtKr66477ZYK6CqMZAu8Dj4ENMyOgIAdAQE7AgJ2BHTjMvELs8UAatgRELAjIGBHQMCOgIAdAQE7AgJ2BATsCAjYERCwIyBgR0DAjoCAHQEBOwICdgQE7AjoxoVfmI2yIyBgR0DAjoCA3XIBxb7Tfm6Aot9pPzNA8e+Tnhmg+EsyZwaINQgp+p32cwMU/U772QEaaEdAwG65gDhR7Bcniv3iMA8Uf0nmzACxBiFxoojEiWIcOwICdssFVKjmZZZD8euONhWrg+qG9HooAmqTGeYve9VF3y2gwQvNnwOQmyjm68f7BTQ043MA8hPFPCWgVjksajpEQO2E7FT6siegaSKgQXYEBOwICNgR0I3L3XxhdqeAGnYEBOwICNgRELAjIGBHQMCOgIAdAQE7AgJ2BATsCAjYERCwIyBgt1xA93+H2Qt/aX//d5jdx88+d3x/0IsCGn6H2dCfN18w43MAGlCD5qeRfRC6w2x+Glfh4B1m81PkedD8REBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAREQEAEBERAQAQEREBABAQ0FtBlb3/xKRPzPNHE/lKfJ1N/8Kg9k7TseD5phGjGWTtNAGROmuv/pfxQlq8Osk5zyvmvdUCdD3B9ejQjrZ3GA/r93UGf7s/3KoY8NWnpiwEaHs1PA5Tm8kDj9ef1o8Ri1QpIr7PXWfTjj1Wp0+ajagTb00avvj+9/rqRVIm8kBz6Hb2m2mSPGo1Y/3j3JXn4ps8XnLRfEwCV+uT5NpdK7WNqA2TW2W+l7uv19qeNSih0L1E8HFXEmX0nk5ynjX2Mq3sRNxptfd6p9LMDNOg8EwCd3hyv53cHiUFfF3Ojh+sWg/O5p7Gamx7K1UGisX8yE1qxflSx2sdsPxzNp7AvYkdjrR2gYeeZAOiyV1d+/egukuooO7pF+9hj+1+YZPaVe6GxqVhL7aATdfD+RdxoDKCsAjTsPBMAXYtU1ekwhlxdhTZArw/mv8SgQqoDknctIHvBDSD3Im40t4AGnWcKoNOb758OOgZHX1+L8TUoBLQ6VJ/Cv4gbTUcNQpoC6LL/8EYukhs3yq5rdtMH1ZqYTs1tH5Q1PsVzROMBbX1zxpoCSHWBdqphJrByO1XXKKYLVKNYDZA8NboaxfQUT4J3L+JG4591rndnUV1VNuw8kwDJlDX3k3s5hRs3aue7mQfVAH2Q+VA1JdHjSe7mQUMGsXHRKOsfO9MbJsnH8KQxAcXToGHq5UVAQPEB6dnabWNry/czAA2NplP8PgiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAiIgIAICIiAgAgIiICACAjoPgC1rm1r7pTgnn4brJ3Ti6D80rDpK/f7dL+AbtIue7Psm4A60i77V7LMdQmAZJGS/vx274P6PgiyTtFuwhBIUSk0lwUAkqViZVLfcMHvg2D3a9BpdrWXWeulqAjIBQAq/WPZqw0XguOtffOmiaXyuIoFADrvDKFwwwV/7FYitgLSK8wXAMg8RCnYYyHcB8Ht19AKSFexJQDSyleHcMMFfxzWoGYfdHUbveQWULhV0NwANTZcCI57+iC9IchbvbJe2qhknSMgqS36T7XhQrAPgt2vwYHysu1Kth7Q+ziYbUxmCUg6H2k3du+D2uYLbr+G/HYepP/JJkmmF5P3c7dTkD+IqvuYSd+xCAiIgIAICIiAgP4HEim9UubKpBYAAAAASUVORK5CYII=" /><!-- --></p>
-</div>
-</div>
+## 1      1187.91     330.5888   1005.214 262.4066
+</code></pre>
 
+<pre><code class="r">barplot(as.matrix(MSE), main = &quot;MSE on validation dataset&quot;, sub = paste(&quot;select=&quot;, select), col = &quot;blue&quot;)
+abline(h = MSE_complete, col = &quot;red&quot;)
+</code></pre>
 
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
+<p><img src="data:image/png;base64,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" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" style="display: block; margin: auto;" /></p>
 
 </body>
+
 </html>
